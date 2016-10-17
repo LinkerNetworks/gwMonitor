@@ -13,6 +13,7 @@ const (
 	keySgwHighThreshold = "SGW_CONN_NUMBER_HIGH_THRESHOLD"
 	// keyPgwLowThreshold  = "PGW_CONN_NUMBER_LOW_THRESHOLD"
 	// keySgwLowThreshold  = "SGW_CONN_NUMBER_LOW_THRESHOLD"
+	keyMarathonURL = "MARATHON_URL"
 )
 
 // Env is value of environment variable

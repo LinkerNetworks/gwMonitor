@@ -18,7 +18,11 @@ var (
 func init() {
 	onceMarathon.Do(func() {
 		config := marathon.NewDefaultConfig()
-		config.URL = conf.OptionsReady.MarathonURL
+		if env(keyMarathonURL).Value != "" {
+			config.URL = env(keyMarathonURL).Value
+		} else {
+			config.URL = conf.OptionsReady.MarathonURL
+		}
 		config.PollingWaitTime = 500 * time.Millisecond
 		config.EventsPort = 50001
 
