@@ -7,46 +7,53 @@ import (
 )
 
 func scalePgwUp() {
-	group, err := getPgwGroup()
-	if err != nil {
-		log.Printf("get pgw group error: %v\n", err)
-		return
-	}
+	pgwAppset := MinAppset{}
+	// group, err := getPgwGroup()
+	//
+	// if err != nil {
+	// 	log.Printf("get pgw group error: %v\n", err)
+	// 	return
+	// }
 
-	scaleto := len(group.Apps) + conf.OptionsReady.PgwScaleStep
+	scaleto := getPgwInstances() + conf.OptionsReady.PgwScaleStep
 
-	n := lenTemplateApps()
-	if scaleto > n {
+	if scaleto > lenTemplateApps() {
 		log.Println("all template apps has started up, wont scale up")
 		return
 	}
 
-	group.Apps = getFirstNApps(scaleto)
+	pgwAppset.Name = pgwGroupID
+	pgwAppset.CreatedByJson = true
+	pgwAppset.Group.ID = pgwGroupID
+	pgwAppset.Group.Apps = getFirstNApps(scaleto)
 
-	err = updateGroup(group)
+	err := putAppset(pgwAppset)
 	if err != nil {
 		log.Printf("update pgw group error: %v\n", err)
 	}
 }
 
 func scaleSgwUp() {
-	group, err := getSgwGroup()
-	if err != nil {
-		log.Printf("get sgw group error: %v\n", err)
-		return
-	}
+	sgwAppset := MinAppset{}
+	// group, err := getSgwGroup()
+	// if err != nil {
+	// 	log.Printf("get sgw group error: %v\n", err)
+	// 	return
+	// }
 
-	scaleto := len(group.Apps) + conf.OptionsReady.SgwScaleStep
+	scaleto := getSgwInstances() + conf.OptionsReady.SgwScaleStep
 
-	n := lenTemplateApps()
-	if scaleto > n {
+	if scaleto > lenTemplateApps() {
 		log.Println("all template apps has started up, wont scale up")
 		return
 	}
 
-	group.Apps = getFirstNApps(scaleto)
+	sgwAppset.Name = sgwGroupID
+	sgwAppset.CreatedByJson = true
+	sgwAppset.Group.ID = sgwGroupID
+	sgwAppset.Group.Apps = getFirstNApps(scaleto)
 
-	err = updateGroup(group)
+	err := putAppset(sgwAppset)
 	if err != nil {
 		log.Printf("update sgw group error: %v\n", err)
 	}
