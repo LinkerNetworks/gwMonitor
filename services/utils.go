@@ -76,27 +76,33 @@ func getMonitorType() (mtype string, err error) {
 	return
 }
 
-func parseJson(jsonstring string) (instances, connNum, ovsId int) {
+func parseJson(jsonstring string) (instances, connNum, ovsId int, scaleInIp string, liveGWs []string) {
+	if len(jsonstring) == 0 {
+		return
+	}
 	var respData = &RespData{}
 	err := json.Unmarshal([]byte(jsonstring), respData)
 	if err != nil {
 		log.Printf("unmarshal json \"%s\" error: %v\n", jsonstring, err)
 		return
 	}
-	return respData.Instances, respData.ConnNum, respData.OvsId
+	return respData.Instances, respData.ConnNum, respData.OvsId, respData.ScaleInIp, respData.LiveGWs
 }
 
-func process(infos []string) (sumInstance int, sumConn int, err error) {
+func process(infos []string) (sumInstance int, sumConn int, scaleInIp string, liveGWs []string) {
 
 	sumInstance = 0
 	sumConn = 0
+	instances, connNum := 0, 0
 	//get sumInstance and sumConn
 	for _, info := range infos {
-		instances, connNum, _ := parseJson(info)
+		// TODO avoid loop
+		instances, connNum, _, scaleInIp, liveGWs = parseJson(info)
 		sumInstance = sumInstance + instances
 		sumConn = sumConn + connNum
 	}
 	//monitorType, _ = getMonitorType()
-	log.Println("sumInstance=", sumInstance, ", sumConn=", sumConn)
+	log.Printf("sumInstance=%d, sumConn=%d, scaleInIp=%s, liveGWs=%v\n",
+		sumInstance, sumConn, scaleInIp, liveGWs)
 	return
 }

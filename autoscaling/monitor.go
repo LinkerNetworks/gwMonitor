@@ -77,7 +77,7 @@ func rewind() {
 
 // judge compares 'realtime' statistic with theshold, and throw alert if overload
 func analyse() (int, error) {
-	instances, connNum, monitorType, err := services.GetInfos()
+	instances, connNum, monitorType, _, _, err := services.GetInfos()
 	if err != nil {
 		log.Printf("E | call service for data error: %v\n", err)
 		return -1, err

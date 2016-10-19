@@ -28,19 +28,21 @@ func (r Resource) callServers(request *restful.Request, response *restful.Respon
 
 	log.Println("callservers...")
 
-	instances, connNum, monitorType, err := GetInfos()
+	instances, connNum, monitorType, scaleInIp, liveGWs, err := GetInfos()
 	if err != nil {
 		resp := RespStruct{Success: false, Err: err.Error()}
 		response.WriteAsJson(resp)
 	}
 
 	respData := RespData{Instances: instances, ConnNum: connNum, MonitorType: monitorType}
+	respData.ScaleInIp = scaleInIp
+	respData.LiveGWs = liveGWs
 	resp := RespStruct{Success: true, Data: respData}
 	response.WriteAsJson(resp)
 }
 
 // GetInfos calls OVS API and returns processed data
-func GetInfos() (instances, connNum int, monitorType string, err error) {
+func GetInfos() (instances, connNum int, monitorType string, scaleInIp string, liveGWs []string, err error) {
 	//get UDP server addresses from ENV file
 	addrs, err := getAddrs()
 	if err != nil {
@@ -69,6 +71,6 @@ func GetInfos() (instances, connNum int, monitorType string, err error) {
 
 	log.Println(infos)
 
-	instances, connNum, _ = process(infos)
+	instances, connNum, scaleInIp, liveGWs = process(infos)
 	return
 }
