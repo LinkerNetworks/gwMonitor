@@ -13,7 +13,7 @@ import (
 )
 
 func getPgwInstances() int {
-	pgwAppset, err := getAppset(pgwGroupID)
+	pgwAppset, err := getAppset(strings.TrimLeft(pgwGroupID, "/"))
 	if err != nil {
 		log.Printf("get appset %s error: %v\n", pgwGroupID, err)
 		return 0
@@ -79,6 +79,7 @@ func getAppset(name string) (minAppset *MinAppset, err error) {
 	}
 
 	url := "http://" + endpoint + "/v1/appsets/" + name
+
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Printf("http get appset %s error: %v\n", url, err)
