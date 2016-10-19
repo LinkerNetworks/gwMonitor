@@ -1,133 +1,782 @@
 {
-	"id": "pgw",
-	"apps": [
-		{
-			"id": "/pgw/pgw1",
-			"cpus": 1,
-			"mem": 2048,
-			"instances": 1,
-			"constraints": [["physicalnode", "CLUSTER", "pn-1"]],
-			"container": {
-				"type": "DOCKER",
-				"docker": {
-					"network": "NONE",
-					"image": "linkerrepository/linker_pgw",
-					"privileged": true,
-					"forcePullImage": true
-				}
-			},
-			"env": {
-				"LINKER_PGW": "true",
-				"LINKER_ETH1_IP": "192.168.3.9/24",
-				"LINKER_ETH2_IP": "192.168.3.13/24",
-				"LINKER_GW_IP": "192.168.3.1",
-				"LINKER_PGW_VIP": "192.168.3.8",
-				"INTERNET_IN_INTERFACE": "eth1",
-				"INTERNET_OUT_INTERFACE": "eth2",
-				"SGi_INTERFACE": "tap2",
-				"SGi_INTERFACE_VETH": "tap1",
-				"IPPOOL_SUBNET": "100.0.0.0",
-				"IPPOOL_MASK": "255.240.0.0",
-				"UE_NUM": "999999",
-				"APN_NAME": "dt.com",
-				"CPU_BIND": "0"
-			}
-		},
-		{
-			"id": "/pgw/pgw2",
-			"cpus": 1,
-			"mem": 2048,
-			"instances": 1,
-			"constraints": [["physicalnode", "CLUSTER", "pn-2"]],
-			"container": {
-				"type": "DOCKER",
-				"docker": {
-					"network": "NONE",
-					"image": "linkerrepository/linker_pgw",
-					"privileged": true,
-					"forcePullImage": true
-				}
-			},
-			"env": {
-				"LINKER_PGW": "true",
-				"LINKER_ETH1_IP": "192.168.3.11/24",
-				"LINKER_ETH2_IP": "192.168.3.15/24",
-				"LINKER_GW_IP": "192.168.3.1",
-				"LINKER_PGW_VIP": "192.168.3.8",
-				"INTERNET_IN_INTERFACE": "eth1",
-				"INTERNET_OUT_INTERFACE": "eth2",
-				"SGi_INTERFACE": "tap2",
-				"SGi_INTERFACE_VETH": "tap1",
-				"IPPOOL_SUBNET": "100.128.0.0",
-				"IPPOOL_MASK": "255.240.0.0",
-				"UE_NUM": "999999",
-				"APN_NAME": "dt.com",
-				"CPU_BIND": "0"
-			}
-		},
-		{
-			"id": "/pgw/pgw3",
-			"cpus": 1,
-			"mem": 2048,
-			"instances": 1,
-			"constraints": [["physicalnode", "CLUSTER", "pn-1"]],
-			"container": {
-				"type": "DOCKER",
-				"docker": {
-					"network": "NONE",
-					"image": "linkerrepository/linker_pgw",
-					"privileged": true,
-					"forcePullImage": true
-				}
-			},
-			"env": {
-				"LINKER_PGW": "true",
-				"LINKER_ETH1_IP": "192.168.3.10/24",
-				"LINKER_ETH2_IP": "192.168.3.14/24",
-				"LINKER_GW_IP": "192.168.3.1",
-				"LINKER_PGW_VIP": "192.168.3.8",
-				"INTERNET_IN_INTERFACE": "eth1",
-				"INTERNET_OUT_INTERFACE": "eth2",
-				"SGi_INTERFACE": "tap2",
-				"SGi_INTERFACE_VETH": "tap1",
-				"IPPOOL_SUBNET": "100.16.0.0",
-				"IPPOOL_MASK": "255.240.0.0",
-				"UE_NUM": "999999",
-				"APN_NAME": "dt.com",
-				"CPU_BIND": "0"
-			}
-		},
-		{
-			"id": "/pgw/pgw4",
-			"cpus": 1,
-			"mem": 2048,
-			"instances": 1,
-			"constraints": [["physicalnode", "CLUSTER", "pn-2"]],
-			"container": {
-				"type": "DOCKER",
-				"docker": {
-					"network": "NONE",
-					"image": "linkerrepository/linker_pgw",
-					"privileged": true,
-					"forcePullImage": true
-				}
-			},
-			"env": {
-				"LINKER_PGW": "true",
-				"LINKER_ETH1_IP": "192.168.3.12/24",
-				"LINKER_ETH2_IP": "192.168.3.16/24",
-				"LINKER_GW_IP": "192.168.3.1",
-				"LINKER_PGW_VIP": "192.168.3.8",
-				"INTERNET_IN_INTERFACE": "eth1",
-				"INTERNET_OUT_INTERFACE": "eth2",
-				"SGi_INTERFACE": "tap2",
-				"SGi_INTERFACE_VETH": "tap1",
-				"IPPOOL_SUBNET": "100.144.0.0",
-				"IPPOOL_MASK": "255.240.0.0",
-				"UE_NUM": "999999",
-				"APN_NAME": "dt.com",
-				"CPU_BIND": "0"
-			}
-		}
-	]
+   "id":"/pgw",
+   "apps":[
+      {
+         "id":"/pgw/pgw1",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.49"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "parameters":[
+
+               ],
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"0",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.0.0.0",
+            "LINKER_ETH1_IP":"192.168.1.200/24",
+            "LINKER_ETH2_IP":"192.168.1.201/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw2",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.50"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"0",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.128.0.0",
+            "LINKER_ETH1_IP":"192.168.1.220/24",
+            "LINKER_ETH2_IP":"192.168.1.221/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw3",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.49"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"1",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.16.0.0",
+            "LINKER_ETH1_IP":"192.168.1.202/24",
+            "LINKER_ETH2_IP":"192.168.1.203/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw4",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.50"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"1",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.144.0.0",
+            "LINKER_ETH1_IP":"192.168.1.222/24",
+            "LINKER_ETH2_IP":"192.168.1.223/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw5",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.49"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"2",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.32.0.0",
+            "LINKER_ETH1_IP":"192.168.1.204/24",
+            "LINKER_ETH2_IP":"192.168.1.205/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw6",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.50"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"2",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.160.0.0",
+            "LINKER_ETH1_IP":"192.168.1.224/24",
+            "LINKER_ETH2_IP":"192.168.1.225/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw7",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.49"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"3",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.48.0.0",
+            "LINKER_ETH1_IP":"192.168.1.206/24",
+            "LINKER_ETH2_IP":"192.168.1.207/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw8",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.50"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"3",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.176.0.0",
+            "LINKER_ETH1_IP":"192.168.1.226/24",
+            "LINKER_ETH2_IP":"192.168.1.227/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw9",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.49"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"0",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.64.0.0",
+            "LINKER_ETH1_IP":"192.168.1.208/24",
+            "LINKER_ETH2_IP":"192.168.1.209/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw10",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.50"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"0",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.192.0.0",
+            "LINKER_ETH1_IP":"192.168.1.228/24",
+            "LINKER_ETH2_IP":"192.168.1.229/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw11",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.49"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"1",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.80.0.0",
+            "LINKER_ETH1_IP":"192.168.1.210/24",
+            "LINKER_ETH2_IP":"192.168.1.211/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw12",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.50"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"1",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.208.0.0",
+            "LINKER_ETH1_IP":"192.168.1.230/24",
+            "LINKER_ETH2_IP":"192.168.1.231/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw13",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.49"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"2",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.96.0.0",
+            "LINKER_ETH1_IP":"192.168.1.212/24",
+            "LINKER_ETH2_IP":"192.168.1.213/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw14",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.50"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"2",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.224.0.0",
+            "LINKER_ETH1_IP":"192.168.1.232/24",
+            "LINKER_ETH2_IP":"192.168.1.233/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw15",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.49"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"3",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.112.0.0",
+            "LINKER_ETH1_IP":"192.168.1.214/24",
+            "LINKER_ETH2_IP":"192.168.1.215/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      },
+      {
+         "id":"/pgw/pgw16",
+         "constraints":[
+            [
+               "hostname",
+               "CLUSTER",
+               "192.168.1.50"
+            ]
+         ],
+         "container":{
+            "type":"DOCKER",
+            "docker":{
+               "forcePullImage":true,
+               "image":"linkerrepository/linker_pgw",
+               "network":"NONE",
+               "privileged":true
+            }
+         },
+         "cpus":0.4,
+         "env":{
+            "APN_NAME":"dt.com",
+            "CPU_BIND":"3",
+            "INTERNET_IN_INTERFACE":"eth1",
+            "INTERNET_OUT_INTERFACE":"eth2",
+            "IPPOOL_MASK":"255.240.0.0",
+            "IPPOOL_SUBNET":"100.240.0.0",
+            "LINKER_ETH1_IP":"192.168.1.234/24",
+            "LINKER_ETH2_IP":"192.168.1.235/24",
+            "LINKER_GW_IP":"192.168.1.1",
+            "LINKER_PGW":"true",
+            "LINKER_PGW_VIP":"192.168.1.99",
+            "SGi_INTERFACE":"tap2",
+            "SGi_INTERFACE_VETH":"tap1",
+            "UE_NUM":"999999"
+         },
+         "instances":1,
+         "mem":1536,
+         "ports":[
+
+         ],
+         "dependencies":[
+
+         ],
+         "uris":null,
+         "fetch":[
+
+         ]
+      }
+   ],
+   "dependencies":[
+
+   ],
+   "groups":[
+
+   ]
 }

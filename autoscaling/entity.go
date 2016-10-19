@@ -10,7 +10,12 @@ type MinAppset struct {
 	Group         marathon.Group `json:"group"`
 }
 
-type Resp struct {
+type AppsetResp struct {
+	Success bool       `json:"success"`
+	Data    *MinAppset `json:"data"`
+}
+
+type ErrResp struct {
 	Success bool  `json:"success"`
 	Error   Error `json:"error"`
 }

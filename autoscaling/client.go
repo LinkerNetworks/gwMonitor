@@ -60,7 +60,7 @@ func putAppset(minAppset MinAppset) (err error) {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		errResp := &Resp{}
+		errResp := &ErrResp{}
 		data, _ := ioutil.ReadAll(resp.Body)
 		json.Unmarshal(data, errResp)
 		log.Println("call client to update appset error: ")
@@ -91,11 +91,12 @@ func getAppset(name string) (minAppset *MinAppset, err error) {
 		return
 	}
 
-	err = json.Unmarshal(data, minAppset)
+	var appsetResp = &AppsetResp{}
+	err = json.Unmarshal(data, appsetResp)
 	if err != nil {
 		log.Printf("json unmarshal error: %v\n", err)
 		return
 	}
 
-	return
+	return appsetResp.Data, nil
 }

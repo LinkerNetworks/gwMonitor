@@ -2,6 +2,7 @@ package autoscaling
 
 import (
 	"log"
+	"strings"
 
 	"github.com/LinkerNetworks/gwMonitor/conf"
 )
@@ -22,7 +23,7 @@ func scalePgwUp() {
 		return
 	}
 
-	pgwAppset.Name = pgwGroupID
+	pgwAppset.Name = strings.TrimLeft(pgwGroupID, "/")
 	pgwAppset.CreatedByJson = true
 	pgwAppset.Group.ID = pgwGroupID
 	pgwAppset.Group.Apps = getFirstNApps(scaleto)
@@ -48,7 +49,7 @@ func scaleSgwUp() {
 		return
 	}
 
-	sgwAppset.Name = sgwGroupID
+	sgwAppset.Name = strings.TrimLeft(sgwGroupID, "/")
 	sgwAppset.CreatedByJson = true
 	sgwAppset.Group.ID = sgwGroupID
 	sgwAppset.Group.Apps = getFirstNApps(scaleto)
