@@ -15,6 +15,11 @@ type AppsetResp struct {
 	Data    *MinAppset `json:"data"`
 }
 
+type MinComponent struct {
+	AppsetName string               `json:"appset_name"`
+	App        marathon.Application `json:"app"`
+}
+
 type ErrResp struct {
 	Success bool  `json:"success"`
 	Error   Error `json:"error"`
