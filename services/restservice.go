@@ -10,18 +10,6 @@ import (
 type Resource struct {
 }
 
-type RespStruct struct {
-	Success bool
-	Data    interface{}
-	Err     string
-}
-
-type RespData struct {
-	Instances   int
-	ConnNum     int
-	MonitorType string
-}
-
 func (r Resource) Register(container *restful.Container) {
 	ws := new(restful.WebService)
 	ws.
@@ -31,7 +19,6 @@ func (r Resource) Register(container *restful.Container) {
 		Produces(restful.MIME_JSON, restful.MIME_XML)
 
 	ws.Route(ws.GET("/").To(r.callServers).
-		// docs
 		Doc("monitor"))
 
 	container.Add(ws)

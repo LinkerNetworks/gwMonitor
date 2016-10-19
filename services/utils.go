@@ -7,8 +7,6 @@ import (
 	"net"
 	"os"
 	"strings"
-
-	"github.com/jmoiron/jsonq"
 )
 
 func UdpCall(server, msg string) (info string, err error) {
@@ -79,15 +77,13 @@ func getMonitorType() (mtype string, err error) {
 }
 
 func parseJson(jsonstring string) (instances, connNum, ovsId int) {
-
-	data := map[string]interface{}{}
-	result := json.NewDecoder(strings.NewReader(jsonstring))
-	result.Decode(&data)
-	jq := jsonq.NewQuery(data)
-	instances, _ = jq.Int("instances")
-	connNum, _ = jq.Int("connNum")
-	ovsId, _ = jq.Int("ovsId")
-	return
+	var respData = &RespData{}
+	err := json.Unmarshal([]byte(jsonstring), respData)
+	if err != nil {
+		log.Printf("unmarshal json \"%s\" error: %v\n", jsonstring, err)
+		return
+	}
+	return respData.Instances, respData.ConnNum, respData.OvsId
 }
 
 func process(infos []string) (sumInstance int, sumConn int, err error) {
