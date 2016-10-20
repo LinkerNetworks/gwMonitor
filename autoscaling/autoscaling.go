@@ -16,13 +16,7 @@ func initScaling() {
 	}
 }
 
-func scaleGwOut(allLiveGWs []string) (err error) {
-	gwAddIP := selectAddGw(allLiveGWs)
-	if len(gwAddIP) == 0 {
-		log.Println("gwAddIP is blank")
-		return
-	}
-
+func scaleGwOut(gwAddIP string) (err error) {
 	appAdd := getAppByEnv(keyScaleInIP, gwAddIP)
 
 	c := &MinComponent{}
@@ -42,13 +36,7 @@ func scaleGwOut(allLiveGWs []string) (err error) {
 	return
 }
 
-func scaleGwIn(allScaleInIPs []string) (err error) {
-	gwDelIP := selectDelGw(allScaleInIPs)
-	if len(gwDelIP) == 0 {
-		log.Println("gwDelIP is blank")
-		return
-	}
-
+func scaleGwIn(gwDelIP string) (err error) {
 	appDel := getAppByEnv(keyScaleInIP, gwDelIP)
 
 	err = delComponent(appDel.ID)
@@ -79,13 +67,4 @@ func selectDelGw(allScaleInIPs []string) (gwDelIP string) {
 		return allScaleInIPs[0]
 	}
 	return
-}
-
-func stringInSlice(a string, list []string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
 }

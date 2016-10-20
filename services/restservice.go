@@ -1,12 +1,13 @@
 package services
 
 import (
+	"encoding/json"
 	"log"
 	"strings"
 )
 
-// GetInfos calls OVS API and returns processed data
-func GetInfos() (instances, connNum int, monitorType string, allScaleInIPs []string, allLiveGWs []string, err error) {
+// CallOvsUDP calls OVS API and returns processed data
+func CallOvsUDP(reqData ReqData) (instances, connNum int, monitorType string, allScaleInIPs []string, allLiveGWs []string, err error) {
 	//get UDP server addresses from ENV file
 	addrs, err := getAddrs()
 	if err != nil {
@@ -23,9 +24,15 @@ func GetInfos() (instances, connNum int, monitorType string, allScaleInIPs []str
 
 	infos := make([]string, 0, len(addrs))
 
+	data, err := json.Marshal(reqData)
+	if err != nil {
+		log.Printf("json marshal reqData error: %v\n", err)
+		return
+	}
+
 	//call UDP servers
 	for _, address := range addrs {
-		info, err := UdpCall(strings.TrimSpace(address), "hi")
+		info, err := UdpCall(strings.TrimSpace(address), string(data))
 		if err != nil {
 			log.Println("UdpCall "+strings.TrimSpace(address)+" failed.", err)
 		}
