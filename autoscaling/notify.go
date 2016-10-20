@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/LinkerNetworks/gwMonitor/services"
+	"github.com/LinkerNetworks/gwMonitor/ovs"
 )
 
 func notifyOvs(removedGwIP string) {

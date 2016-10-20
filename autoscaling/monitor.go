@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/LinkerNetworks/gwMonitor/conf"
-	"github.com/LinkerNetworks/gwMonitor/services"
+	"github.com/LinkerNetworks/gwMonitor/ovs"
 )
 
 const (
