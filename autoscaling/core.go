@@ -16,7 +16,7 @@ const (
 )
 
 // judge compares 'realtime' statistic with theshold, and throw alert if overload
-func analyseAlert(instances, connNum int, highThreshold int, allScaleInIPs []string) (int, error) {
+func analyseAlert(instances, connNum int, highThreshold int, allScaleInIPsLen int) (int, error) {
 	if instances == 0 {
 		return alertNone, nil
 	}
@@ -28,7 +28,7 @@ func analyseAlert(instances, connNum int, highThreshold int, allScaleInIPs []str
 		return alertHighGwConn, nil
 	}
 	// check if GW is idle
-	if len(allScaleInIPs) > 0 {
+	if allScaleInIPsLen > 0 {
 		return alertIdleGw, nil
 	}
 	return alertNone, nil

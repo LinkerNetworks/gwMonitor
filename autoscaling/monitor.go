@@ -61,7 +61,7 @@ func startGwMonitorDaemon(highGwThreshold int) {
 			log.Printf("E | call service for data error: %v\n", err)
 			continue
 		}
-		alert, err := analyseAlert(instances, connNum, highGwThreshold, allScaleInIPs)
+		alert, err := analyseAlert(instances, connNum, highGwThreshold, len(allScaleInIPs))
 		if err != nil {
 			log.Printf("E | analyse error: %v\n", err)
 			continue

@@ -8,17 +8,17 @@ import (
 
 func TestAnalyseAlert(t *testing.T) {
 	var cases = []struct {
-		Instances     int
-		ConnNum       int
-		HighThreshold int
-		AllScaleInIPs []string
-		ExpectAlert   int
+		Instances        int
+		ConnNum          int
+		HighThreshold    int
+		AllScaleInIPsLen int
+		ExpectAlert      int
 	}{
-		{2, 100, 100, []string{"192.168.1.1"}, alertIdleGw},
+		{2, 100, 100, 1, alertIdleGw},
 	}
 
 	for _, c := range cases {
-		gotAlert, gotErr := analyseAlert(c.Instances, c.ConnNum, c.HighThreshold, c.AllScaleInIPs)
+		gotAlert, gotErr := analyseAlert(c.Instances, c.ConnNum, c.HighThreshold, c.AllScaleInIPsLen)
 		assert.Equal(t, c.ExpectAlert, gotAlert)
 		assert.Equal(t, nil, gotErr)
 	}
