@@ -7,6 +7,17 @@ type RespStruct struct {
 	Err     string      `json:"err"`
 }
 
+// RespData is structure of response provided by monitor REST API
+// * ScaleInIp is an unique mark of gateway, value is env of gateway when its' connNum==0
+type RestRespData struct {
+	Instances     int      `json:"instances"`
+	ConnNum       int      `json:"connNum"`
+	MonitorType   string   `json:"monitorType"`
+	OvsId         int      `json:"ovsId"`
+	AllScaleInIPs []string `json:"allScaleInIPs"`
+	AllLiveGWs    []string `json:"allLiveGWs"`
+}
+
 // RespData is structure of response from OVS by UDP
 // * ScaleInIp is an unique mark of gateway, value is env of gateway when its' connNum==0
 type RespData struct {

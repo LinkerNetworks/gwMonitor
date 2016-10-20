@@ -89,20 +89,22 @@ func parseJson(jsonstring string) (instances, connNum, ovsId int, scaleInIp stri
 	return respData.Instances, respData.ConnNum, respData.OvsId, respData.ScaleInIp, respData.LiveGWs
 }
 
-func process(infos []string) (sumInstance int, sumConn int, scaleInIp string, liveGWs []string) {
+func process(infos []string) (sumInstance int, sumConn int, allScaleInIPs []string, allLiveGWs []string) {
 
 	sumInstance = 0
 	sumConn = 0
-	instances, connNum := 0, 0
 	//get sumInstance and sumConn
 	for _, info := range infos {
-		// TODO avoid loop
-		instances, connNum, _, scaleInIp, liveGWs = parseJson(info)
+		instances, connNum, _, scaleInIp, liveGWs := parseJson(info)
 		sumInstance = sumInstance + instances
 		sumConn = sumConn + connNum
+		allScaleInIPs = append(allScaleInIPs, scaleInIp)
+		for _, liveGW := range liveGWs {
+			allLiveGWs = append(allLiveGWs, liveGW)
+		}
 	}
 	//monitorType, _ = getMonitorType()
-	log.Printf("sumInstance=%d, sumConn=%d, scaleInIp=%s, liveGWs=%v\n",
-		sumInstance, sumConn, scaleInIp, liveGWs)
+	log.Printf("sumInstance=%d, sumConn=%d, allScaleInIPs=%s, allLiveGWs=%v\n",
+		sumInstance, sumConn, allScaleInIPs, allLiveGWs)
 	return
 }

@@ -2,7 +2,7 @@ package autoscaling
 
 import (
 	"bufio"
-	"errors"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -14,19 +14,13 @@ import (
 const (
 	typePGW = "PGW"
 	typeSGW = "SGW"
-
-	alertHighPgwConn = iota
-	alertHighSgwConn
-	// alertLowPgwConn
-	// alertLowSgwConn
-
 )
 
 var (
-	pollingSeconds = conf.OptionsReady.PollingTime
-	pollingTime    = time.Duration(pollingSeconds) * time.Second
-	pgwTolerance   = 0
-	sgwTolerance   = 0
+	pollingSeconds      = conf.OptionsReady.PollingTime
+	pollingTime         = time.Duration(pollingSeconds) * time.Second
+	gwOverloadTolerance = 0
+	gwIdleTolerance     = 0
 )
 
 // StartMonitor checks if an alert exists for a period <seconds>, and tigger autoscaling if it does.
@@ -36,74 +30,79 @@ func StartMonitor() {
 		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	}
 
-	rewind()
+	monitorType := env(keyMonitorType).Value
+	switch monitorType {
+	case typePGW:
+		log.Println("starting PGW monitor daemon...")
+		highThreshold := env(keyPgwHighThreshold).ToInt()
+		startGwMonitorDaemon(highThreshold)
+	case typeSGW:
+		log.Println("starting SGW monitor daemon...")
+		highThreshold := env(keySgwHighThreshold).ToInt()
+		startGwMonitorDaemon(highThreshold)
+	default:
+		log.Printf("unknown monitor type \"%s\", must set env %s\n", monitorType, keyMonitorType)
+		os.Exit(1)
+	}
+
+}
+
+func startGwMonitorDaemon(highGwThreshold int) {
+	initDaemon()
 	for {
 		time.Sleep(pollingTime)
-		alert, err := analyse()
+		instances, connNum, gwType, allScaleInIPs, allLiveGWs, err := services.GetInfos()
+		log.Printf("I | got data: instances %d, connNum %d, gwType %s, allScaleInIPs %v, allLiveGWs %v\n",
+			instances, connNum, gwType, allScaleInIPs, allLiveGWs)
+		if err != nil {
+			log.Printf("E | call service for data error: %v\n", err)
+			continue
+		}
+		alert, err := analyse(instances, connNum, highGwThreshold, allScaleInIPs)
 		if err != nil {
 			log.Printf("E | analyse error: %v\n", err)
 			continue
 		}
 		switch alert {
-		case alertHighPgwConn:
-			pgwTolerance--
-			log.Printf("I | will scale PGW up in %ds\n", pgwTolerance)
-		case alertHighSgwConn:
-			sgwTolerance--
-			log.Printf("I | will scale SGW up in %ds\n", sgwTolerance)
+		case alertHighGwConn:
+			gwOverloadTolerance--
+			log.Printf("I | will scale out GW in %ds\n", gwOverloadTolerance*pollingSeconds)
+		case alertIdleGw:
+			gwIdleTolerance--
+			log.Printf("I | will scale in GW in %ds\n", gwIdleTolerance*pollingSeconds)
 		default:
 			// acts like a timer
-			rewind()
+			rewindGwOverloadTimer()
+			rewindGwIdleTimer()
 		}
-		if pgwTolerance <= 0 {
-			rewind()
-			// pgw overload
-			log.Println("I | scaling up PGW instance...")
-			scalePgwUp()
+		if gwOverloadTolerance <= 0 {
+			rewindGwOverloadTimer()
+			// gate overload
+			log.Println("I | scaling out GW instance...")
+			scaleGwOut(allLiveGWs)
 		}
-		if sgwTolerance <= 0 {
-			rewind()
-			// sgw overload
-			log.Println("I | scaling up SGW instance...")
-			scaleSgwUp()
+		if gwIdleTolerance <= 0 {
+			rewindGwIdleTimer()
+			// gate idle
+			log.Println("I | scaling in GW instance...")
+			scaleGwIn(allScaleInIPs)
 		}
 	}
 }
 
-func rewind() {
-	pgwTolerance = conf.OptionsReady.PgwTolerance
-	sgwTolerance = conf.OptionsReady.SgwTolerance
+func rewindGwOverloadTimer() {
+	gwOverloadTolerance = conf.OptionsReady.GwOverloadTolerance
+	fmt.Println(conf.OptionsReady.GwOverloadTolerance)
 }
 
-// judge compares 'realtime' statistic with theshold, and throw alert if overload
-func analyse() (int, error) {
-	instances, connNum, monitorType, _, _, err := services.GetInfos()
-	if err != nil {
-		log.Printf("E | call service for data error: %v\n", err)
-		return -1, err
-	}
-	log.Printf("I | got data: instances %d, connNum %d, monitorType %s\n", instances, connNum, monitorType)
+func rewindGwIdleTimer() {
+	gwIdleTolerance = conf.OptionsReady.GwIdleTolerance
+	fmt.Println(conf.OptionsReady.GwIdleTolerance)
+}
 
-	realtimeAvgConn := float32(connNum) / float32(instances)
-
-	switch monitorType {
-	case typePGW:
-		// check if PGW is overload
-		highPgwThreshold := env(keyPgwHighThreshold).ToInt()
-		log.Printf("I | realtimeAvgConn %v, highPgwThreshold %d\n", realtimeAvgConn, highPgwThreshold)
-		if realtimeAvgConn > float32(highPgwThreshold) {
-			return alertHighPgwConn, nil
-		}
-	case typeSGW:
-		// check if SGW is overload
-		highSgwThreshold := env(keySgwHighThreshold).ToInt()
-		log.Printf("I | realtimeAvgConn %v, highSgwThreshold %d\n", realtimeAvgConn, highSgwThreshold)
-		if realtimeAvgConn > float32(highSgwThreshold) {
-			return alertHighSgwConn, nil
-		}
-	default:
-		log.Printf("E | unknow gateway type: %s\n", monitorType)
-		return -2, errors.New("unknown gateway type")
-	}
-	return -3, nil
+func initDaemon() {
+	initTemplate()
+	initScaling()
+	rewindGwOverloadTimer()
+	rewindGwIdleTimer()
 }

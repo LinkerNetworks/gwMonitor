@@ -21,4 +21,4 @@ If `MONITOR_TYPE` is set to **PGW**, setting only `PGW_CONN_NUMBER_HIGH_THRESHOL
 
 Similarly, **PGW** for **SGW_CONN_NUMBER_HIGH_THRESHOLD**.
 
-If env `MARATHON_URL` is set, field `marathon_url` in `monitor.conf` will be ignored.
+If env `CLIENT_ENDPOINT` is set, field `client_endpoint` in `monitor.conf` will be ignored.

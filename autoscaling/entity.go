@@ -26,6 +26,6 @@ type ErrResp struct {
 }
 
 type Error struct {
-	Code     string `code`
-	ErrorMsg string `errormsg`
+	Code     string `json:"code"`
+	ErrorMsg string `json:"errormsg"`
 }

@@ -21,15 +21,13 @@ var (
 
 // Options is the structure for config file.
 type Options struct {
-	RestEnabled  bool   `hcl:"enable_rest"`
-	PollingTime  int    `hcl:"polling_time"`
-	PgwTolerance int    `hcl:"pgw_tolerance"`
-	SgwTolerance int    `hcl:"sgw_tolerance"`
-	PgwScaleStep int    `hcl:"pgw_scale_step"`
-	SgwScaleStep int    `hcl:"sgw_scale_step"`
-	MarathonURL  string `hcl:"marathon_url"`
-	PgwJSON      string `hcl:"pgw_json"`
-	SgwJSON      string `hcl:"sgw_json"`
+	RestEnabled         bool   `hcl:"enable_rest"`
+	PollingTime         int    `hcl:"polling_time"`
+	GwOverloadTolerance int    `hcl:"gw_overload_tolerance"`
+	GwIdleTolerance     int    `hcl:"gw_idle_tolerance"`
+	ClientEndpoint      string `hcl:"client_endpoint"`
+	PgwJSON             string `hcl:"pgw_json"`
+	SgwJSON             string `hcl:"sgw_json"`
 }
 
 func init() {

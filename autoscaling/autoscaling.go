@@ -3,59 +3,89 @@ package autoscaling
 import (
 	"log"
 	"strings"
-
-	"github.com/LinkerNetworks/gwMonitor/conf"
 )
 
-func scalePgwUp() {
-	pgwAppset := MinAppset{}
-	// group, err := getPgwGroup()
-	//
-	// if err != nil {
-	// 	log.Printf("get pgw group error: %v\n", err)
-	// 	return
-	// }
+var (
+	allGwScaleIPs []string
+)
 
-	scaleto := getPgwInstances() + conf.OptionsReady.PgwScaleStep
-
-	if scaleto > lenTemplateApps() {
-		log.Println("all template apps has started up, wont scale up")
-		return
-	}
-
-	pgwAppset.Name = strings.TrimLeft(pgwGroupID, "/")
-	pgwAppset.CreatedByJson = true
-	pgwAppset.Group.ID = pgwGroupID
-	pgwAppset.Group.Apps = getFirstNApps(scaleto)
-
-	err := putAppset(pgwAppset)
-	if err != nil {
-		log.Printf("update pgw group error: %v\n", err)
+func initScaling() {
+	for _, app := range gwGroup.Apps {
+		env := *app.Env
+		allGwScaleIPs = append(allGwScaleIPs, env[keyScaleInIP])
 	}
 }
 
-func scaleSgwUp() {
-	sgwAppset := MinAppset{}
-	// group, err := getSgwGroup()
-	// if err != nil {
-	// 	log.Printf("get sgw group error: %v\n", err)
-	// 	return
-	// }
-
-	scaleto := getSgwInstances() + conf.OptionsReady.SgwScaleStep
-
-	if scaleto > lenTemplateApps() {
-		log.Println("all template apps has started up, wont scale up")
+func scaleGwOut(allLiveGWs []string) (err error) {
+	gwAddIP := selectAddGw(allLiveGWs)
+	if len(gwAddIP) == 0 {
+		log.Println("gwAddIP is blank")
 		return
 	}
 
-	sgwAppset.Name = strings.TrimLeft(sgwGroupID, "/")
-	sgwAppset.CreatedByJson = true
-	sgwAppset.Group.ID = sgwGroupID
-	sgwAppset.Group.Apps = getFirstNApps(scaleto)
+	appAdd := getAppByEnv(keyScaleInIP, gwAddIP)
 
-	err := putAppset(sgwAppset)
+	c := &MinComponent{}
+	c.App = *appAdd
+	c.AppsetName = strings.TrimLeft(gwGroup.ID, "/")
+
+	err = addComponent(c)
 	if err != nil {
-		log.Printf("update sgw group error: %v\n", err)
+		log.Printf("add component[appID: %s] error: %v\n", c.App.ID, err)
+		return
 	}
+
+	err = startComponent(c.App.ID)
+	if err != nil {
+		log.Printf("start component[appID: %s] error: %v\n", c.App.ID, err)
+	}
+	return
+}
+
+func scaleGwIn(allScaleInIPs []string) (err error) {
+	gwDelIP := selectDelGw(allScaleInIPs)
+	if len(gwDelIP) == 0 {
+		log.Println("gwDelIP is blank")
+		return
+	}
+
+	appDel := getAppByEnv(keyScaleInIP, gwDelIP)
+
+	err = delComponent(appDel.ID)
+	if err != nil {
+		log.Printf("delete component error: %v\n", err)
+		return
+	}
+	return
+}
+
+// select gateway to add
+func selectAddGw(allLiveGWs []string) (gwAddIP string) {
+	var usableGWs []string
+	for _, gw := range allGwScaleIPs {
+		if !stringInSlice(gw, allLiveGWs) {
+			usableGWs = append(usableGWs, gw)
+		}
+	}
+	if len(usableGWs) >= 1 {
+		return usableGWs[0]
+	}
+	return
+}
+
+// select gateway to remove
+func selectDelGw(allScaleInIPs []string) (gwDelIP string) {
+	if len(allScaleInIPs) >= 1 {
+		return allScaleInIPs[0]
+	}
+	return
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }

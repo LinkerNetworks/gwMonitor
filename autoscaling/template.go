@@ -5,71 +5,49 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"sync"
 
 	"github.com/LinkerNetworks/gwMonitor/conf"
 	marathon "github.com/gambol99/go-marathon"
 )
 
 var (
-	onceTemplate sync.Once
-
-	jsonPath   string
-	pgwGroupID string
-	sgwGroupID string
+	gwGroup *marathon.Group
 )
 
-func init() {
-	onceTemplate.Do(func() {
-		monitorType := env(keyMonitorType).Value
-		switch monitorType {
-		case typePGW:
-			jsonPath = conf.OptionsReady.PgwJSON
-			pgwGroupID = groupID()
-		case typeSGW:
-			jsonPath = conf.OptionsReady.SgwJSON
-			sgwGroupID = groupID()
-		default:
-			log.Printf("unknow monitor type: %s\n", monitorType)
+func initTemplate() {
+	monitorType := env(keyMonitorType).Value
+	switch monitorType {
+	case typePGW:
+		jsonPath := conf.OptionsReady.PgwJSON
+		gwGroup = loadTemplate(jsonPath)
+	case typeSGW:
+		jsonPath := conf.OptionsReady.SgwJSON
+		gwGroup = loadTemplate(jsonPath)
+	default:
+		log.Printf("unknow monitor type: %s\n", monitorType)
+	}
+}
+
+func getAppByEnv(key string, value string) (app *marathon.Application) {
+	for _, app := range gwGroup.Apps {
+		envMap := *app.Env
+		if envMap[key] == value {
+			return app
 		}
-	})
+	}
+	return
 }
 
-// return apps from 0 to <n> in JSON template
-func getFirstNApps(n int) (apps []*marathon.Application) {
+func loadTemplate(jsonPath string) (group *marathon.Group) {
 	content, err := readTextFile(jsonPath)
 	if err != nil {
 		return
 	}
-	group, err := parseJSON(content)
+	group, err = parseJSON(content)
 	if err != nil {
 		return
 	}
-	return group.Apps[:n]
-}
-
-func lenTemplateApps() int {
-	content, err := readTextFile(jsonPath)
-	if err != nil {
-		return -1
-	}
-	group, err := parseJSON(content)
-	if err != nil {
-		return -2
-	}
-	return len(group.Apps)
-}
-
-func groupID() string {
-	content, err := readTextFile(jsonPath)
-	if err != nil {
-		return ""
-	}
-	group, err := parseJSON(content)
-	if err != nil {
-		return ""
-	}
-	return group.ID
+	return
 }
 
 func parseJSON(content []byte) (group *marathon.Group, err error) {
@@ -87,7 +65,7 @@ func readTextFile(path string) (content []byte, err error) {
 		log.Printf("stat file error: %v\n", err)
 		return
 	}
-	content, err = ioutil.ReadFile(jsonPath)
+	content, err = ioutil.ReadFile(path)
 	if err != nil {
 		log.Printf("read file error: %v\n", err)
 		return
