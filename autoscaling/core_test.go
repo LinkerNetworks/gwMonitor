@@ -6,7 +6,7 @@ import (
 	"github.com/bmizerany/assert"
 )
 
-func TestAnalyse(t *testing.T) {
+func TestAnalyseAlert(t *testing.T) {
 	var cases = []struct {
 		Instances     int
 		ConnNum       int
@@ -18,7 +18,7 @@ func TestAnalyse(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		gotAlert, gotErr := analyse(c.Instances, c.ConnNum, c.HighThreshold, c.AllScaleInIPs)
+		gotAlert, gotErr := analyseAlert(c.Instances, c.ConnNum, c.HighThreshold, c.AllScaleInIPs)
 		assert.Equal(t, c.ExpectAlert, gotAlert)
 		assert.Equal(t, nil, gotErr)
 	}

@@ -16,7 +16,7 @@ const (
 )
 
 // judge compares 'realtime' statistic with theshold, and throw alert if overload
-func analyse(instances, connNum int, highThreshold int, allScaleInIPs []string) (int, error) {
+func analyseAlert(instances, connNum int, highThreshold int, allScaleInIPs []string) (int, error) {
 	if instances == 0 {
 		return alertNone, nil
 	}
