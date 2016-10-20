@@ -29,3 +29,9 @@ type Error struct {
 	Code     string `json:"code"`
 	ErrorMsg string `json:"errormsg"`
 }
+
+// Operation is struct indicating what will do, on which GW when scaling.
+type Operation struct {
+	Action string
+	GwIP   string
+}

@@ -54,14 +54,14 @@ func startGwMonitorDaemon(highGwThreshold int) {
 	reqData.HighThreshold = string(highGwThreshold)
 	for {
 		time.Sleep(pollingTime)
-		instances, connNum, gwType, allScaleInIPs, allLiveGWs, err := services.CallOvsUDP(reqData)
-		log.Printf("I | got data: instances %d, connNum %d, gwType %s, allScaleInIPs %v, allLiveGWs %v\n",
-			instances, connNum, gwType, allScaleInIPs, allLiveGWs)
+		instances, connNum, gwType, allIdleGWs, allLiveGWs, err := services.CallOvsUDP(reqData)
+		log.Printf("I | got data: instances %d, connNum %d, gwType %s, allIdleGWs %v, allLiveGWs %v\n",
+			instances, connNum, gwType, allIdleGWs, allLiveGWs)
 		if err != nil {
 			log.Printf("E | call service for data error: %v\n", err)
 			continue
 		}
-		alert, err := analyseAlert(instances, connNum, highGwThreshold, len(allScaleInIPs))
+		alert, err := analyseAlert(instances, connNum, highGwThreshold, len(allIdleGWs))
 		if err != nil {
 			log.Printf("E | analyse error: %v\n", err)
 			continue
@@ -71,10 +71,8 @@ func startGwMonitorDaemon(highGwThreshold int) {
 			gwOverloadTolerance--
 			log.Printf("I | will scale out GW in %ds\n", gwOverloadTolerance*pollingSeconds)
 		case alertIdleGw:
-			if len(allScaleInIPs) > 0 {
-				gwIdleTolerance--
-				log.Printf("I | will scale in GW in %ds\n", gwIdleTolerance*pollingSeconds)
-			}
+			gwIdleTolerance--
+			log.Printf("I | will scale in GW in %ds\n", gwIdleTolerance*pollingSeconds)
 		default:
 			rewindGwOverloadTimer()
 			rewindGwIdleTimer()
@@ -83,24 +81,16 @@ func startGwMonitorDaemon(highGwThreshold int) {
 			rewindGwOverloadTimer()
 			// gateway overload for 60s(default)
 			log.Println("I | scaling out GW instance...")
-			gwAddIP := selectAddGw(allLiveGWs)
-			if len(gwAddIP) == 0 {
-				log.Println("gwAddIP is blank")
-				continue
-			}
-			scaleGwOut(gwAddIP)
+			operation := analyseOperation(allLiveGWs, allIdleGWs, allGwScaleIPs, alert)
+			scaleGw(operation)
 		}
 		if gwIdleTolerance <= 0 {
 			rewindGwIdleTimer()
 			// gateway idle for 300s(default)
 			log.Println("I | scaling in GW instance...")
-			gwDelIP := selectDelGw(allScaleInIPs)
-			if len(gwDelIP) == 0 {
-				log.Println("gwDelIP is blank")
-				continue
-			}
-			scaleGwIn(gwDelIP)
-			go notifyOvs(gwDelIP)
+			operation := analyseOperation(allLiveGWs, allIdleGWs, allGwScaleIPs, alert)
+			scaleGw(operation)
+			go notifyOvs(operation.GwIP)
 		}
 	}
 }

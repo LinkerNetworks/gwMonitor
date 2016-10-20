@@ -16,6 +16,17 @@ func initScaling() {
 	}
 }
 
+func scaleGw(operation Operation) {
+	switch operation.Action {
+	case actionAdd:
+		scaleGwOut(operation.GwIP)
+	case actionDel:
+		scaleGwIn(operation.GwIP)
+	default:
+		log.Printf("unknown action \"%s\"\n", operation.Action)
+	}
+}
+
 func scaleGwOut(gwAddIP string) (err error) {
 	appAdd := getAppByEnv(keyScaleInIP, gwAddIP)
 
@@ -43,28 +54,6 @@ func scaleGwIn(gwDelIP string) (err error) {
 	if err != nil {
 		log.Printf("delete component error: %v\n", err)
 		return
-	}
-	return
-}
-
-// select gateway to add
-func selectAddGw(allLiveGWs []string) (gwAddIP string) {
-	var usableGWs []string
-	for _, gw := range allGwScaleIPs {
-		if !stringInSlice(gw, allLiveGWs) {
-			usableGWs = append(usableGWs, gw)
-		}
-	}
-	if len(usableGWs) >= 1 {
-		return usableGWs[0]
-	}
-	return
-}
-
-// select gateway to remove
-func selectDelGw(allScaleInIPs []string) (gwDelIP string) {
-	if len(allScaleInIPs) >= 1 {
-		return allScaleInIPs[0]
 	}
 	return
 }
