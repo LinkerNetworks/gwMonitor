@@ -38,8 +38,6 @@ func CallOvsUDP(reqData ReqData) (instances, connNum int, monitorType string, al
 		infos = append(infos, info)
 	}
 
-	log.Println(infos)
-
 	instances, connNum, allScaleInIPs, allLiveGWs = process(infos)
 	return
 }

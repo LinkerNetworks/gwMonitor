@@ -23,7 +23,7 @@ func UdpCall(server, msg string) (info string, err error) {
 
 	defer conn.Close()
 
-	log.Println("Writing data to server...")
+	log.Printf("Writing to server[%s], data: %s\n", addr, msg)
 	_, err = conn.Write([]byte(msg))
 	if err != nil {
 		log.Println("error: ", "failed:", err)
@@ -40,7 +40,7 @@ func UdpCall(server, msg string) (info string, err error) {
 
 	if remoteAddr != nil {
 		if n > 0 {
-			log.Println("from address", remoteAddr, "got message:", string(data[0:n]), n)
+			log.Println("Got data from address", remoteAddr, "message:", string(data[0:n]), n)
 			info = string(data[0:n])
 		}
 	}
