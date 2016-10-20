@@ -3,43 +3,7 @@ package services
 import (
 	"log"
 	"strings"
-
-	"github.com/emicklei/go-restful"
 )
-
-type Resource struct {
-}
-
-func (r Resource) Register(container *restful.Container) {
-	ws := new(restful.WebService)
-	ws.
-		Path("/monitor").
-		Doc("monitor").
-		Consumes("*/*").
-		Produces(restful.MIME_JSON, restful.MIME_XML)
-
-	ws.Route(ws.GET("/").To(r.callServers).
-		Doc("monitor"))
-
-	container.Add(ws)
-}
-
-func (r Resource) callServers(request *restful.Request, response *restful.Response) {
-
-	log.Println("callservers...")
-
-	instances, connNum, monitorType, allScaleInIPs, allLiveGWs, err := GetInfos()
-	if err != nil {
-		resp := RespStruct{Success: false, Err: err.Error()}
-		response.WriteAsJson(resp)
-	}
-
-	respData := RestRespData{Instances: instances, ConnNum: connNum, MonitorType: monitorType}
-	respData.AllScaleInIPs = allScaleInIPs
-	respData.AllLiveGWs = allLiveGWs
-	resp := RespStruct{Success: true, Data: respData}
-	response.WriteAsJson(resp)
-}
 
 // GetInfos calls OVS API and returns processed data
 func GetInfos() (instances, connNum int, monitorType string, allScaleInIPs []string, allLiveGWs []string, err error) {

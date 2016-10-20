@@ -21,7 +21,6 @@ var (
 
 // Options is the structure for config file.
 type Options struct {
-	RestEnabled         bool   `hcl:"enable_rest"`
 	PollingTime         int    `hcl:"polling_time"`
 	GwOverloadTolerance int    `hcl:"gw_overload_tolerance"`
 	GwIdleTolerance     int    `hcl:"gw_idle_tolerance"`

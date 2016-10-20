@@ -1,7 +1,6 @@
 package conf
 
 var defaultOptions = Options{
-	RestEnabled:         false,
 	PollingTime:         1,
 	GwOverloadTolerance: 60,
 	GwIdleTolerance:     300,
