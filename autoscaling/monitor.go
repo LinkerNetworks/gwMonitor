@@ -28,10 +28,18 @@ func StartMonitor() {
 	case typePGW:
 		log.Println("starting PGW monitor daemon...")
 		highThreshold := env(keyPgwHighThreshold).ToInt()
+		if highThreshold <= 0 {
+			log.Printf("invalid threshold, must set env %s\n", keyPgwHighThreshold)
+			os.Exit(1)
+		}
 		startGwMonitorDaemon(highThreshold)
 	case typeSGW:
 		log.Println("starting SGW monitor daemon...")
 		highThreshold := env(keySgwHighThreshold).ToInt()
+		if highThreshold <= 0 {
+			log.Printf("invalid threshold, must set env %s\n", keySgwHighThreshold)
+			os.Exit(1)
+		}
 		startGwMonitorDaemon(highThreshold)
 	default:
 		log.Printf("unknown monitor type \"%s\", must set env %s\n", monitorType, keyMonitorType)
@@ -63,8 +71,10 @@ func startGwMonitorDaemon(highGwThreshold int) {
 			gwOverloadTolerance--
 			log.Printf("I | will scale out GW in %ds\n", gwOverloadTolerance*pollingSeconds)
 		case alertIdleGw:
-			gwIdleTolerance--
-			log.Printf("I | will scale in GW in %ds\n", gwIdleTolerance*pollingSeconds)
+			if len(allScaleInIPs) > 0 {
+				gwIdleTolerance--
+				log.Printf("I | will scale in GW in %ds\n", gwIdleTolerance*pollingSeconds)
+			}
 		default:
 			rewindGwOverloadTimer()
 			rewindGwIdleTimer()
@@ -87,7 +97,7 @@ func startGwMonitorDaemon(highGwThreshold int) {
 			gwDelIP := selectDelGw(allScaleInIPs)
 			if len(gwDelIP) == 0 {
 				log.Println("gwDelIP is blank")
-				return
+				continue
 			}
 			scaleGwIn(gwDelIP)
 			go notifyOvs(gwDelIP)
