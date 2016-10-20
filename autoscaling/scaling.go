@@ -16,14 +16,14 @@ func initScaling() {
 	}
 }
 
-func scaleGw(operation Operation) {
-	switch operation.Action {
+func scaleGw(action string, gwIP string) {
+	switch action {
 	case actionAdd:
-		scaleGwOut(operation.GwIP)
+		scaleGwOut(gwIP)
 	case actionDel:
-		scaleGwIn(operation.GwIP)
+		scaleGwIn(gwIP)
 	default:
-		log.Printf("unknown action \"%s\"\n", operation.Action)
+		log.Printf("unknown action \"%s\"\n", action)
 	}
 }
 

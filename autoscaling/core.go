@@ -8,8 +8,9 @@ const (
 	alertNone
 	alertError
 
-	actionAdd string = "add"
-	actionDel string = "del"
+	actionAdd  string = "add"
+	actionDel  string = "del"
+	actionNone string = "none"
 
 	// env in template app
 	keyScaleInIP = "SCALE_IN_IP"
@@ -34,22 +35,39 @@ func analyseAlert(instances, connections int, highThreshold int, lenIdleGWs int)
 	return alertNone, nil
 }
 
-// analyseOperation decides what to do on which gw.
-func analyseOperation(liveGWs, idleGWs, allGWs []string, alert int) (operation Operation) {
+// makeDecision decides what to do on which gw.
+func makeDecision(liveGWs, idleGWs, allGWs []string, alert int) (decision Decision) {
+	if len(liveGWs) < 2 {
+		decision.Action = actionNone
+		decision.Reason = "liveGws < 2"
+		return
+	}
+
 	switch alert {
 	case alertHighGwConn:
 		gwAddIP := selectAddGw(liveGWs, allGWs)
-		operation.Action = actionAdd
-		operation.GwIP = gwAddIP
+		if len(gwAddIP) == 0 {
+			decision.Action = actionNone
+			decision.Reason = "no more usable GW"
+			return
+		}
+		decision.Action = actionAdd
+		decision.GwIP = gwAddIP
 	case alertIdleGw:
 		gwDelIP := selectDelGw(idleGWs)
-		operation.Action = actionDel
-		operation.GwIP = gwDelIP
-	case alertNone:
-		// do nothing
-	case alertError:
-		log.Println("received alertError")
+		if len(gwDelIP) == 0 {
+			decision.Action = actionNone
+			decision.Reason = "unexpected idle GWs"
+			return
+		}
+		decision.Action = actionDel
+		decision.GwIP = gwDelIP
+	case alertNone, alertError:
+		decision.Action = actionNone
+		decision.Reason = "unexpected alert"
 	default:
+		decision.Action = actionNone
+		decision.Reason = "unknown alert"
 		log.Printf("unknown alert %d\n", alert)
 	}
 	return

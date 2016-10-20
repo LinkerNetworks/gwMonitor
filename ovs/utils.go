@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"time"
 )
 
 func UdpCall(server, msg string) (info string, err error) {
@@ -20,6 +21,7 @@ func UdpCall(server, msg string) (info string, err error) {
 		log.Println("error: ", "Can't dial: ", err)
 		return "", err
 	}
+	conn.SetDeadline(time.Now().Add(3 * time.Second))
 
 	defer conn.Close()
 
@@ -93,7 +95,9 @@ func process(infos []string) (sumInstance int, sumConn int, allScaleInIPs []stri
 		instances, connNum, _, scaleInIp, liveGWs := parseJson(info)
 		sumInstance = sumInstance + instances
 		sumConn = sumConn + connNum
-		allScaleInIPs = append(allScaleInIPs, scaleInIp)
+		if strings.TrimSpace(scaleInIp) != "" {
+			allScaleInIPs = append(allScaleInIPs, scaleInIp)
+		}
 		for _, liveGW := range liveGWs {
 			allLiveGWs = append(allLiveGWs, liveGW)
 		}

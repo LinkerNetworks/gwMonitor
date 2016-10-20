@@ -24,25 +24,25 @@ func TestAnalyseAlert(t *testing.T) {
 	}
 }
 
-func TestAnalyseOperation(t *testing.T) {
+func TestMakeDecision(t *testing.T) {
 	var cases = []struct {
-		LiveGWs           []string
-		IdleGWs           []string
-		AllGWs            []string
-		Alert             int
-		ExpectedOperation Operation
+		LiveGWs          []string
+		IdleGWs          []string
+		AllGWs           []string
+		Alert            int
+		ExpectedDecision Decision
 	}{
 		{
 			[]string{"1", "2", "3"},
 			[]string{"2"},
 			[]string{"1", "2", "3", "4", "5"},
 			alertHighGwConn,
-			Operation{Action: actionAdd, GwIP: "4"},
+			Operation{Action: actionAdd, GwIP: "4", Reason: ""},
 		},
 	}
 
 	for _, c := range cases {
-		gotOperation := analyseOperation(c.LiveGWs, c.IdleGWs, c.AllGWs, c.Alert)
-		assert.Equal(t, c.ExpectedOperation, gotOperation)
+		gotDecision := makeDecision(c.LiveGWs, c.IdleGWs, c.AllGWs, c.Alert)
+		assert.Equal(t, c.ExpectedDecision, gotDecision)
 	}
 }

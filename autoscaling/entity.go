@@ -30,8 +30,10 @@ type Error struct {
 	ErrorMsg string `json:"errormsg"`
 }
 
-// Operation is struct indicating what will do, on which GW when scaling.
-type Operation struct {
+// Decision is struct indicating what will do, on which GW when scaling.
+// Leave a reason if do not perform scaling.
+type Decision struct {
 	Action string
 	GwIP   string
+	Reason string
 }
