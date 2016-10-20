@@ -1,5 +1,3 @@
-// linker dcos client
-
 package autoscaling
 
 import (
@@ -12,7 +10,8 @@ import (
 	"strings"
 )
 
-// call client to add an app, not started after creation
+// call client to add an app
+// app not started after creation
 func addComponent(component *MinComponent) (err error) {
 	endpoint := env(keyClientEndpoint).Value
 	if strings.TrimSpace(endpoint) == "" {
@@ -52,7 +51,8 @@ func addComponent(component *MinComponent) (err error) {
 	return
 }
 
-// appId is absolute marathon app ID
+// call client to start app
+// appId must be absolute marathon app ID
 func startComponent(appID string) (err error) {
 	endpoint := env(keyClientEndpoint).Value
 	if strings.TrimSpace(endpoint) == "" {
@@ -91,6 +91,7 @@ func startComponent(appID string) (err error) {
 }
 
 // call client to delete an app
+// appId must be absolute marathon app ID
 func delComponent(appID string) (err error) {
 	endpoint := env(keyClientEndpoint).Value
 	if strings.TrimSpace(endpoint) == "" {

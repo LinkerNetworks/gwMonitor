@@ -1,8 +1,6 @@
 package autoscaling
 
 import (
-	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -23,13 +21,8 @@ var (
 	gwIdleTolerance     = 0
 )
 
-// StartMonitor checks if an alert exists for a period <seconds>, and tigger autoscaling if it does.
+// StartMonitor checks if GW is overload or idle for a period, and trigger scaling if it is.
 func StartMonitor() {
-	if env(keyMonitorDisable).ToBool() == true {
-		log.Printf("monitor not enabled, set env %s to true to enable\n", keyMonitorDisable)
-		bufio.NewReader(os.Stdin).ReadBytes('\n')
-	}
-
 	monitorType := env(keyMonitorType).Value
 	switch monitorType {
 	case typePGW:
@@ -73,13 +66,12 @@ func startGwMonitorDaemon(highGwThreshold int) {
 			gwIdleTolerance--
 			log.Printf("I | will scale in GW in %ds\n", gwIdleTolerance*pollingSeconds)
 		default:
-			// acts like a timer
 			rewindGwOverloadTimer()
 			rewindGwIdleTimer()
 		}
 		if gwOverloadTolerance <= 0 {
 			rewindGwOverloadTimer()
-			// gateway overload for 60s
+			// gateway overload for 60s(default)
 			log.Println("I | scaling out GW instance...")
 			gwAddIP := selectAddGw(allLiveGWs)
 			if len(gwAddIP) == 0 {
@@ -90,7 +82,7 @@ func startGwMonitorDaemon(highGwThreshold int) {
 		}
 		if gwIdleTolerance <= 0 {
 			rewindGwIdleTimer()
-			// gateway idle for 300s
+			// gateway idle for 300s(default)
 			log.Println("I | scaling in GW instance...")
 			gwDelIP := selectDelGw(allScaleInIPs)
 			if len(gwDelIP) == 0 {
@@ -105,12 +97,10 @@ func startGwMonitorDaemon(highGwThreshold int) {
 
 func rewindGwOverloadTimer() {
 	gwOverloadTolerance = conf.OptionsReady.GwOverloadTolerance
-	fmt.Println(conf.OptionsReady.GwOverloadTolerance)
 }
 
 func rewindGwIdleTimer() {
 	gwIdleTolerance = conf.OptionsReady.GwIdleTolerance
-	fmt.Println(conf.OptionsReady.GwIdleTolerance)
 }
 
 func initDaemon() {

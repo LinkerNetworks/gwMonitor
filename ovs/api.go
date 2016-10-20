@@ -13,14 +13,12 @@ func CallOvsUDP(reqData ReqData) (instances, connNum int, monitorType string, al
 	if err != nil {
 		return
 	}
-	log.Println(addrs, len(addrs))
 
 	monitorType, err = getMonitorType()
 	if err != nil {
 		log.Println(monitorType)
 		return
 	}
-	log.Println("MONITOR_TYPE: ", monitorType)
 
 	infos := make([]string, 0, len(addrs))
 

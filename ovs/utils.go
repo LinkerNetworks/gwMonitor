@@ -10,7 +10,6 @@ import (
 )
 
 func UdpCall(server, msg string) (info string, err error) {
-
 	addr, err := net.ResolveUDPAddr("udp", server)
 	if err != nil {
 		log.Println("error: ", "Can't resolve address: ", err)
@@ -24,7 +23,7 @@ func UdpCall(server, msg string) (info string, err error) {
 
 	defer conn.Close()
 
-	log.Println("Writing something to server...")
+	log.Println("Writing data to server...")
 	_, err = conn.Write([]byte(msg))
 	if err != nil {
 		log.Println("error: ", "failed:", err)
@@ -34,26 +33,22 @@ func UdpCall(server, msg string) (info string, err error) {
 	data := make([]byte, 1024)
 
 	n, remoteAddr, err := conn.ReadFromUDP(data)
-	log.Println("Connecting...")
 	if err != nil {
 		log.Println("error: ", "failed to read UDP msg because of ", err)
 		return "", err
 	}
 
 	if remoteAddr != nil {
-		log.Println("got message from ", remoteAddr, " with n = ", n)
 		if n > 0 {
 			log.Println("from address", remoteAddr, "got message:", string(data[0:n]), n)
 			info = string(data[0:n])
 		}
 	}
 
-	log.Println(info)
 	return info, nil
 }
 
 func getAddrs() (addrs []string, err error) {
-
 	strAddrs := os.Getenv("ADDRESSES")
 	if strings.EqualFold(strAddrs, "nil") {
 		err = errors.New("getAddrs failed, find no addresses")

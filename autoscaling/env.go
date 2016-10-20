@@ -8,14 +8,13 @@ import (
 
 const (
 	// env inside gwMonitor container
-	keyMonitorDisable   = "MONITOR_DISABLE"
 	keyMonitorType      = "MONITOR_TYPE"
 	keyPgwHighThreshold = "PGW_CONN_NUMBER_HIGH_THRESHOLD"
 	keySgwHighThreshold = "SGW_CONN_NUMBER_HIGH_THRESHOLD"
 	keyClientEndpoint   = "CLIENT_ENDPOINT"
 )
 
-// Env is value of environment variable
+// Env is struct of environment variable
 type Env struct {
 	Key   string
 	Value string
