@@ -17,3 +17,12 @@ func printPretty(v interface{}, mark string) (err error) {
 	os.Stdout.Write(data)
 	return
 }
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
