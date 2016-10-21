@@ -6,7 +6,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/yudai/hcl"
+	"github.com/hashicorp/hcl"
 )
 
 const configFile = "monitor.conf"
