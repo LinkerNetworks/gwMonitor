@@ -10,6 +10,10 @@ import (
 	"time"
 )
 
+const (
+	keyAddresses = "ADDRESSES"
+)
+
 func UdpCall(server, msg string) (info string, err error) {
 	addr, err := net.ResolveUDPAddr("udp", server)
 	if err != nil {
@@ -51,7 +55,7 @@ func UdpCall(server, msg string) (info string, err error) {
 }
 
 func getAddrs() (addrs []string, err error) {
-	strAddrs := os.Getenv("ADDRESSES")
+	strAddrs := os.Getenv(keyAddresses)
 	if strings.EqualFold(strAddrs, "nil") {
 		err = errors.New("getAddrs failed, find no addresses")
 		return

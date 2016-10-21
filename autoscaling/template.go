@@ -26,6 +26,7 @@ func initTemplate() {
 	default:
 		log.Printf("unknow monitor type: %s\n", monitorType)
 	}
+	verifyJSON()
 }
 
 func getAppByEnv(key string, value string) (app *marathon.Application) {

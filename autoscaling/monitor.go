@@ -24,13 +24,14 @@ var (
 
 // StartMonitor checks if GW is overload or idle for a period, and trigger scaling if it is.
 func StartMonitor() {
+	verifyEnv()
 	monitorType := env(keyMonitorType).Value
 	switch monitorType {
 	case typePGW:
 		log.Println("I | starting PGW monitor daemon...")
 		highThreshold := env(keyPgwHighThreshold).ToInt()
 		if highThreshold <= 0 {
-			log.Printf("E | invalid threshold, must set env %s\n", keyPgwHighThreshold)
+			log.Printf("E | invalid threshold, check env %s\n", keyPgwHighThreshold)
 			os.Exit(1)
 		}
 		startGwMonitorDaemon(highThreshold)
@@ -38,7 +39,7 @@ func StartMonitor() {
 		log.Println("I | starting SGW monitor daemon...")
 		highThreshold := env(keySgwHighThreshold).ToInt()
 		if highThreshold <= 0 {
-			log.Printf("E | invalid threshold, must set env %s\n", keySgwHighThreshold)
+			log.Printf("E | invalid threshold, check env %s\n", keySgwHighThreshold)
 			os.Exit(1)
 		}
 		startGwMonitorDaemon(highThreshold)

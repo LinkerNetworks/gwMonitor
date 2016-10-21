@@ -12,6 +12,7 @@ const (
 	keyPgwHighThreshold = "PGW_CONN_NUMBER_HIGH_THRESHOLD"
 	keySgwHighThreshold = "SGW_CONN_NUMBER_HIGH_THRESHOLD"
 	keyClientEndpoint   = "CLIENT_ENDPOINT"
+	keyAddresses        = "ADDRESSES"
 )
 
 // Env is struct of environment variable
