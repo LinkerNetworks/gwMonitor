@@ -37,9 +37,9 @@ func analyseAlert(instances, connections int, highThreshold int, lenIdleGWs int)
 
 // makeDecision decides what to do on which gw.
 func makeDecision(liveGWs, idleGWs, allGWs []string, alert int) (decision Decision) {
-	if len(liveGWs) < 2 {
+	if len(liveGWs) <= 2 {
 		decision.Action = actionNone
-		decision.Reason = "liveGws < 2"
+		decision.Reason = "liveGws <= 2"
 		return
 	}
 
