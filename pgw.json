@@ -38,6 +38,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -87,6 +88,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -136,6 +138,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -185,6 +188,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -234,6 +238,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -283,6 +288,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -332,6 +338,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -381,6 +388,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -430,6 +438,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -479,6 +488,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -528,6 +538,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -577,6 +588,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -626,6 +638,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
@@ -675,6 +688,7 @@
             "LINKER_PGW_VIP":"192.168.1.99",
             "SGi_INTERFACE":"tap2",
             "SGi_INTERFACE_VETH":"tap1",
+            "QCI_DSCP": "ef,ef,ef,af41,af31,af31,af21,af11,be",
             "UE_NUM":"999999"
          },
          "instances":1,
