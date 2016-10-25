@@ -34,6 +34,9 @@ func CallOvsUDP(req Req) (instances, connNum int, monitorType string, allScaleIn
 			log.Println("UdpCall "+strings.TrimSpace(address)+" failed.", err)
 		}
 		resp := parseJson(respData)
+		if resp == nil {
+			continue
+		}
 		allResp = append(allResp, *resp)
 	}
 
