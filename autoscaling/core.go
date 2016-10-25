@@ -1,6 +1,10 @@
 package autoscaling
 
-import "log"
+import (
+	"log"
+
+	"github.com/LinkerNetworks/gwMonitor/ovs"
+)
 
 const (
 	alertHighGwConn = iota
@@ -37,10 +41,9 @@ func analyseAlert(instances, connections int, highThreshold int, lenIdleGWs int)
 
 // makeDecision decides what to do on which gw.
 func makeDecision(liveGWs, idleGWs, allGWs []string, alert int) (decision Decision) {
-	// TODO hard code
-	if len(liveGWs) <= 2 {
+	if len(liveGWs) <= ovs.HostCount() {
 		decision.Action = actionNone
-		decision.Reason = "liveGws <= 2"
+		decision.Reason = "liveGws <= HostCount"
 		return
 	}
 
@@ -90,6 +93,8 @@ func selectAddGw(liveGWs, allGWs []string) (gwAddIP string) {
 }
 
 // select gateway to remove
+// There should be a least 1 GW running on every host
+// OVS server promised that it wont return idleGWs if there's only one idle GW on a host
 func selectDelGw(idleGWs []string) (gwDelIP string) {
 	if len(idleGWs) >= 1 {
 		return idleGWs[0]

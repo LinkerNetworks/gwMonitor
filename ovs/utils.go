@@ -1,4 +1,4 @@
-package services
+package ovs
 
 import (
 	"encoding/json"
@@ -63,6 +63,12 @@ func getAddrs() (addrs []string, err error) {
 	//strAddrs looks like : "127.0.0.1:8080,127.0.0.1:8081"
 	addrs = strings.Split(strAddrs, ",")
 	return
+}
+
+// HostCount return count of OVS hosts
+func HostCount() (n int) {
+	addrs, _ := getAddrs()
+	return len(addrs)
 }
 
 func getMonitorType() (mtype string, err error) {

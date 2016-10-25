@@ -1,4 +1,4 @@
-package services
+package ovs
 
 // Resp is structure of response from OVS by UDP
 // * ScaleInIp is an unique mark of gateway, value is env of gateway when its' connNum==0
