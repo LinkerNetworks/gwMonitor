@@ -20,4 +20,12 @@ If `MONITOR_TYPE` is set to `"PGW"`, setting only `PGW_CONN_NUMBER_HIGH_THRESHOL
 
 Similarly, **SGW** for **SGW_CONN_NUMBER_HIGH_THRESHOLD**.
 
-If env `CLIENT_ENDPOINT` is set, field `client_endpoint` in `monitor.conf` will be ignored. 
+If env `CLIENT_ENDPOINT` is set, field `client_endpoint` in `monitor.conf` will be ignored.
+
+# Docker
+
+```sh
+./build.sh
+docker build -t linkerrepository/gwmonitor:dev .
+docker run -e MONITOR_TYPE="PGW" -e CLIENT_ENDPOINT="192.168.10.91:10004" -e PGW_CONN_NUMBER_HIGH_THRESHOLD=100 -e ADDRESSES="192.168.10.186:18080" --network=host linkerrepository/gwmonitor:dev
+```
