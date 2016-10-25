@@ -7,7 +7,7 @@ import (
 )
 
 // CallOvsUDP calls OVS API and returns processed data
-func CallOvsUDP(reqData ReqData) (instances, connNum int, monitorType string, allScaleInIPs []string, allLiveGWs []string, err error) {
+func CallOvsUDP(req Req) (instances, connNum int, monitorType string, allScaleInIPs []string, allLiveGWs []string, err error) {
 	//get UDP server addresses from ENV file
 	addrs, err := getAddrs()
 	if err != nil {
@@ -20,24 +20,23 @@ func CallOvsUDP(reqData ReqData) (instances, connNum int, monitorType string, al
 		return
 	}
 
-	infos := make([]string, 0, len(addrs))
-
-	data, err := json.Marshal(reqData)
+	reqData, err := json.Marshal(req)
 	if err != nil {
 		log.Printf("json marshal reqData error: %v\n", err)
 		return
 	}
 
+	allResp := make([]Resp, 0, len(addrs))
 	//call UDP servers
 	for _, address := range addrs {
-		info, err := UdpCall(strings.TrimSpace(address), string(data))
+		respData, err := UdpCall(strings.TrimSpace(address), string(reqData))
 		if err != nil {
 			log.Println("UdpCall "+strings.TrimSpace(address)+" failed.", err)
 		}
-		info = strings.TrimSpace(info)
-		infos = append(infos, info)
+		resp := parseJson(respData)
+		allResp = append(allResp, *resp)
 	}
 
-	instances, connNum, allScaleInIPs, allLiveGWs = process(infos)
+	instances, connNum, allScaleInIPs, allLiveGWs = process(allResp)
 	return
 }

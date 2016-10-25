@@ -16,8 +16,8 @@ Clone and move this project under $GOPATH/src/github.com/LinkerNetworks/ to star
 | SGW_CONN_NUMBER_HIGH_THRESHOLD | 300 | Threshold of SGW average connections. | 0 |
 | CLIENT_ENDPOINT | 192.168.10.91:10004 | Endpoint of Linker DC/OS client. | "" |
 
-If `MONITOR_TYPE` is set to **PGW**, setting only `PGW_CONN_NUMBER_HIGH_THRESHOLD`.
+If `MONITOR_TYPE` is set to `"PGW"`, setting only `PGW_CONN_NUMBER_HIGH_THRESHOLD`.
 
-Similarly, **PGW** for **SGW_CONN_NUMBER_HIGH_THRESHOLD**.
+Similarly, **SGW** for **SGW_CONN_NUMBER_HIGH_THRESHOLD**.
 
-If env `CLIENT_ENDPOINT` is set, field `client_endpoint` in `monitor.conf` will be ignored.
+If env `CLIENT_ENDPOINT` is set, field `client_endpoint` in `monitor.conf` will be ignored. 

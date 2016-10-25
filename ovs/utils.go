@@ -77,32 +77,31 @@ func getMonitorType() (mtype string, err error) {
 	return
 }
 
-func parseJson(jsonstring string) (instances, connNum, ovsId int, scaleInIp string, liveGWs []string) {
+func parseJson(jsonstring string) (resp *Resp) {
 	if len(jsonstring) == 0 {
 		return
 	}
-	var respData = &RespData{}
-	err := json.Unmarshal([]byte(jsonstring), respData)
+	resp = &Resp{}
+	err := json.Unmarshal([]byte(jsonstring), resp)
 	if err != nil {
 		log.Printf("unmarshal json \"%s\" error: %v\n", jsonstring, err)
 		return
 	}
-	return respData.Instances, respData.ConnNum, respData.OvsId, respData.ScaleInIp, respData.LiveGWs
+	return
 }
 
-func process(infos []string) (sumInstance int, sumConn int, allScaleInIPs []string, allLiveGWs []string) {
+func process(allResp []Resp) (sumInstance int, sumConn int, allScaleInIPs []string, allLiveGWs []string) {
 
 	sumInstance = 0
 	sumConn = 0
 	//get sumInstance and sumConn
-	for _, info := range infos {
-		instances, connNum, _, scaleInIp, liveGWs := parseJson(info)
-		sumInstance = sumInstance + instances
-		sumConn = sumConn + connNum
-		if strings.TrimSpace(scaleInIp) != "" {
-			allScaleInIPs = append(allScaleInIPs, scaleInIp)
+	for _, resp := range allResp {
+		sumInstance += resp.Instances
+		sumConn += resp.ConnNum
+		if strings.TrimSpace(resp.ScaleInIp) != "" {
+			allScaleInIPs = append(allScaleInIPs, resp.ScaleInIp)
 		}
-		for _, liveGW := range liveGWs {
+		for _, liveGW := range resp.LiveGWs {
 			allLiveGWs = append(allLiveGWs, liveGW)
 		}
 	}

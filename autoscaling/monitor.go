@@ -52,11 +52,11 @@ func StartMonitor() {
 
 func startGwMonitorDaemon(highGwThreshold int) {
 	initDaemon()
-	reqData := services.ReqData{}
-	reqData.HighThreshold = strconv.Itoa(highGwThreshold)
+	req := services.Req{}
+	req.HighThreshold = strconv.Itoa(highGwThreshold)
 	for {
 		time.Sleep(pollingTime)
-		instances, connNum, _, allIdleGWs, allLiveGWs, err := services.CallOvsUDP(reqData)
+		instances, connNum, _, allIdleGWs, allLiveGWs, err := services.CallOvsUDP(req)
 		log.Printf("I | got data: instances %d, connNum %d, allIdleGWs %v, allLiveGWs %v\n",
 			instances, connNum, allIdleGWs, allLiveGWs)
 		if err != nil {

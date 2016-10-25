@@ -19,9 +19,9 @@ func notifyOvs(removedGwIP string) {
 }
 
 func send(scaleInIP string) (aliveGWs []string, err error) {
-	reqData := services.ReqData{}
-	reqData.ScaleInIp = scaleInIP
-	_, _, _, _, aliveGWs, err = services.CallOvsUDP(reqData)
+	req := services.Req{}
+	req.ScaleInIp = scaleInIP
+	_, _, _, _, aliveGWs, err = services.CallOvsUDP(req)
 	if err != nil {
 		log.Printf("call ovs udp error: %v\n", err)
 	}
