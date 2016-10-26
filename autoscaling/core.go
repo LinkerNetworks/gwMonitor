@@ -21,19 +21,20 @@ const (
 )
 
 // judge compares 'realtime' statistic with theshold, and throw alert if overload
-func analyseAlert(instances, connections int, highThreshold int, lenIdleGWs int) (int, error) {
+func analyseAlert(instances, connections int, highThreshold int, lowThreshold int, lenIdleGWs int) (int, error) {
 	if instances == 0 {
 		return alertNone, nil
 	}
 	realtimeAvgConn := float32(connections) / float32(instances)
 
 	// check if GW is overload
-	log.Printf("I | realtimeAvgConn %f, highGwThreshold %d\n", realtimeAvgConn, highThreshold)
+	log.Printf("I | realtimeAvgConn %f, highGwThreshold %d lowGwThreshold %d\n",
+		realtimeAvgConn, highThreshold, lowThreshold)
 	if realtimeAvgConn > float32(highThreshold) {
 		return alertHighGwConn, nil
 	}
 	// check if GW is idle
-	if lenIdleGWs > 0 {
+	if realtimeAvgConn < float32(lowThreshold) && lenIdleGWs > 0 {
 		return alertIdleGw, nil
 	}
 	return alertNone, nil

@@ -10,7 +10,9 @@ const (
 	// env inside gwMonitor container
 	keyMonitorType      = "MONITOR_TYPE"
 	keyPgwHighThreshold = "PGW_CONN_NUMBER_HIGH_THRESHOLD"
+	keyPgwLowThreshold  = "PGW_CONN_NUMBER_LOW_THRESHOLD"
 	keySgwHighThreshold = "SGW_CONN_NUMBER_HIGH_THRESHOLD"
+	keySgwLowThreshold  = "SGW_CONN_NUMBER_LOW_THRESHOLD"
 	keyClientEndpoint   = "CLIENT_ENDPOINT"
 	keyAddresses        = "ADDRESSES"
 )

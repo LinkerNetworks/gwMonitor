@@ -31,19 +31,29 @@ func StartMonitor() {
 	case typePGW:
 		log.Println("I | starting PGW monitor daemon...")
 		highThreshold := env(keyPgwHighThreshold).ToInt()
+		lowThreshold := env(keyPgwLowThreshold).ToInt()
 		if highThreshold <= 0 {
 			log.Printf("E | invalid threshold, check env %s\n", keyPgwHighThreshold)
 			os.Exit(1)
 		}
-		startGwMonitorDaemon(highThreshold)
+		if lowThreshold <= 0 {
+			log.Printf("E | invalid threshold, check env %s\n", keyPgwLowThreshold)
+			os.Exit(1)
+		}
+		startGwMonitorDaemon(highThreshold, lowThreshold)
 	case typeSGW:
 		log.Println("I | starting SGW monitor daemon...")
 		highThreshold := env(keySgwHighThreshold).ToInt()
+		lowThreshold := env(keySgwLowThreshold).ToInt()
 		if highThreshold <= 0 {
 			log.Printf("E | invalid threshold, check env %s\n", keySgwHighThreshold)
 			os.Exit(1)
 		}
-		startGwMonitorDaemon(highThreshold)
+		if lowThreshold <= 0 {
+			log.Printf("E | invalid threshold, check env %s\n", keySgwLowThreshold)
+			os.Exit(1)
+		}
+		startGwMonitorDaemon(highThreshold, lowThreshold)
 	default:
 		log.Printf("E | unknown monitor type \"%s\", must set env %s\n", monitorType, keyMonitorType)
 		os.Exit(1)
@@ -51,7 +61,7 @@ func StartMonitor() {
 
 }
 
-func startGwMonitorDaemon(highGwThreshold int) {
+func startGwMonitorDaemon(highGwThreshold, lowThreshold int) {
 	initDaemon()
 	req := ovs.Req{}
 	req.HighThreshold = strconv.Itoa(highGwThreshold)
@@ -64,7 +74,7 @@ func startGwMonitorDaemon(highGwThreshold int) {
 			log.Printf("E | call service for data error: %v\n", err)
 			continue
 		}
-		alert, err := analyseAlert(instances, connNum, highGwThreshold, len(allIdleGWs))
+		alert, err := analyseAlert(instances, connNum, highGwThreshold, lowThreshold, len(allIdleGWs))
 		if err != nil {
 			log.Printf("E | analyse error: %v\n", err)
 			continue
