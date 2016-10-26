@@ -29,6 +29,18 @@ func initTemplate() {
 	verifyJSON()
 }
 
+func getEth1Ip(scaleInIp string) (eth1Ip string) {
+	app := getAppByEnv(keyScaleInIP, scaleInIp)
+	envMap := *app.Env
+	return envMap[keyEth1]
+}
+
+func getEth2Ip(scaleInIp string) (eth2Ip string) {
+	app := getAppByEnv(keyScaleInIP, scaleInIp)
+	envMap := *app.Env
+	return envMap[keyEth2]
+}
+
 func getAppByEnv(key string, value string) (app *marathon.Application) {
 	for _, app := range gwGroup.Apps {
 		envMap := *app.Env
