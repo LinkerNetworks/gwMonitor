@@ -11,33 +11,30 @@ func TestAnalyseAlert(t *testing.T) {
 		Connections   int
 		Instances     int
 		HighThreshold int
+		LowThreshold  int
 		LenIdleGWs    int
 		ExpectedAlert int
 	}{
 		// UT cases provided by <jwang2@linkernetworks.com>, thanks for hard work.
-		{0, 0, 0, 0, alertNone},
-		{50, 1, 100, 0, alertNone},
-		{50, 1, 100, 1, alertIdleGw},
-		{110, 1, 100, 0, alertHighGwConn},
-		{110, 1, 100, 1, alertHighGwConn},
-		{100, 2, 100, 0, alertNone},
-		{100, 2, 100, 1, alertIdleGw},
-		{200, 2, 100, 0, alertNone},
-		{200, 2, 100, 1, alertIdleGw},
-		{300, 2, 100, 0, alertHighGwConn},
-		{300, 2, 100, 1, alertHighGwConn},
-		{500, 10, 100, 0, alertNone},
-		{500, 10, 100, 2, alertIdleGw},
-		{1100, 10, 100, 0, alertHighGwConn},
-		{1100, 10, 100, 1, alertHighGwConn},
-		{800, 16, 100, 0, alertNone},
-		{800, 16, 100, 1, alertIdleGw},
-		{1700, 16, 100, 0, alertHighGwConn},
-		{1700, 16, 100, 1, alertHighGwConn},
+		{0, 0, 0, 0, 0, alertNone},
+		{30, 1, 100, 50, 0, alertNone},
+		{30, 1, 100, 50, 1, alertIdleGw},
+		{50, 1, 100, 50, 0, alertNone},
+		{50, 1, 100, 50, 1, alertNone},
+		{80, 1, 100, 50, 0, alertNone},
+		{80, 1, 100, 50, 1, alertNone},
+		{100, 1, 100, 50, 0, alertNone},
+		{100, 1, 100, 50, 1, alertNone},
+		{120, 1, 100, 50, 0, alertHighGwConn},
+		{120, 1, 100, 50, 1, alertHighGwConn},
+		{701, 7, 100, 50, 0, alertHighGwConn},
+		{701, 7, 100, 50, 1, alertHighGwConn},
+		{349, 7, 100, 50, 0, alertNone},
+		{349, 7, 100, 50, 1, alertIdleGw},
 	}
 
 	for _, c := range cases {
-		gotAlert, gotErr := analyseAlert(c.Instances, c.Connections, c.HighThreshold, c.LenIdleGWs)
+		gotAlert, gotErr := analyseAlert(c.Instances, c.Connections, c.HighThreshold, c.LowThreshold, c.LenIdleGWs)
 		assert.Equal(t, c.ExpectedAlert, gotAlert)
 		assert.Equal(t, nil, gotErr)
 	}
@@ -52,182 +49,38 @@ func TestMakeDecision(t *testing.T) {
 		IdleGWs        []string
 		AllGWs         []string
 		Alert          int
+		HostCount      int
 		ExpectedAction string
 		ExpectedGwIP   string
 	}{
 		// UT cases provided by <jwang2@linkernetworks.com>, thanks for hard work.
-		{
-			// liveGws <= 2
-			[]string{},
-			[]string{},
-			tAllGWs,
-			alertNone,
-			actionNone,
-			"",
-		},
-		{
-			// liveGws <= 2
-			[]string{"1"},
-			[]string{},
-			tAllGWs,
-			alertNone,
-			actionNone,
-			"",
-		},
-		{
-			// liveGws <= 2
-			[]string{"2"},
-			[]string{},
-			tAllGWs,
-			alertNone,
-			actionNone,
-			"",
-		},
-		{
-			// liveGws <= 2
-			[]string{"1", "2"},
-			[]string{"2"},
-			tAllGWs,
-			alertIdleGw,
-			actionNone,
-			"",
-		},
-		{
-			[]string{"1", "2", "3"},
-			[]string{},
-			tAllGWs,
-			alertNone,
-			actionNone,
-			"",
-		},
-		{
-			[]string{"1", "2", "3"},
-			[]string{},
-			tAllGWs,
-			alertHighGwConn,
-			actionAdd,
-			"4",
-		},
-		{
-			[]string{"1", "2", "3"},
-			[]string{"2"},
-			tAllGWs,
-			alertHighGwConn,
-			actionAdd,
-			"4",
-		},
-		{
-			[]string{"1", "2", "3"},
-			[]string{"2"},
-			tAllGWs,
-			alertIdleGw,
-			actionDel,
-			"2",
-		},
-		{
-			[]string{"1", "2", "5"},
-			[]string{},
-			tAllGWs,
-			alertHighGwConn,
-			actionAdd,
-			"3",
-		},
-		{
-			[]string{"1", "2", "5"},
-			[]string{"2"},
-			tAllGWs,
-			alertHighGwConn,
-			actionAdd,
-			"3",
-		},
-		{
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
-			[]string{},
-			tAllGWs,
-			alertNone,
-			actionNone,
-			"",
-		},
-		{
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
-			[]string{},
-			tAllGWs,
-			alertHighGwConn,
-			actionAdd,
-			"11",
-		},
-		{
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
-			[]string{"3"},
-			tAllGWs,
-			alertHighGwConn,
-			actionAdd,
-			"11",
-		},
-		{
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
-			[]string{"2", "10"},
-			tAllGWs,
-			alertIdleGw,
-			actionDel,
-			"2",
-		},
-		{
-			// unexpected alert
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
-			[]string{"2", "10"},
-			tAllGWs,
-			alertError,
-			actionNone,
-			"",
-		},
-		{
-			// unexpected idle GWs
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
-			[]string{},
-			tAllGWs,
-			alertIdleGw,
-			actionNone,
-			"",
-		},
-		{
-			// unknown alert
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
-			[]string{},
-			tAllGWs,
-			10,
-			actionNone,
-			"",
-		},
-		{
-			// no more usable GW
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
-			[]string{},
-			tAllGWs,
-			alertHighGwConn,
-			actionNone,
-			"",
-		},
-		{
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
-			[]string{"7", "13"},
-			tAllGWs,
-			alertHighGwConn,
-			actionNone,
-			"",
-		},
-		{
-			[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
-			[]string{"7", "13"},
-			tAllGWs,
-			alertIdleGw,
-			actionDel,
-			"7",
-		},
+		{[]string{}, []string{}, tAllGWs, alertNone, 0, actionNone, ""},
+		{[]string{"1"}, []string{}, tAllGWs, alertNone, 1, actionNone, ""},
+		{[]string{"1"}, []string{}, tAllGWs, alertHighGwConn, 1, actionAdd, "2"},
+		{[]string{"1"}, []string{"1"}, tAllGWs, alertHighGwConn, 1, actionAdd, "2"},
+		{[]string{"1"}, []string{}, tAllGWs, alertHighGwConn, 2, actionAdd, "2"},
+		{[]string{"1"}, []string{"1"}, tAllGWs, alertIdleGw, 2, actionNone, ""},
+		{[]string{"1", "2"}, []string{"1"}, tAllGWs, alertIdleGw, 2, actionNone, ""},
+		{[]string{"1", "2"}, []string{}, tAllGWs, alertHighGwConn, 2, actionAdd, "3"},
+		{[]string{"1", "2"}, []string{"2"}, tAllGWs, alertHighGwConn, 2, actionAdd, "3"},
+		{[]string{"1", "2", "5"}, []string{}, tAllGWs, alertHighGwConn, 2, actionAdd, "3"},
+		{[]string{"5", "2", "6"}, []string{}, tAllGWs, alertHighGwConn, 2, actionAdd, "1"},
+		{[]string{"1", "2", "5"}, []string{"1"}, tAllGWs, alertIdleGw, 2, actionDel, "1"},
+		{[]string{"1", "2", "5"}, []string{""}, tAllGWs, alertIdleGw, 2, actionNone, ""},
+		{[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}, []string{"2", "5"}, tAllGWs, alertIdleGw, 2, actionDel, "2"},
+		{[]string{"6", "8", "2", "3", "4", "9", "10"}, []string{"2", "9"}, tAllGWs, alertIdleGw, 2, actionDel, "2"},
+		{[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}, []string{"2", "9"}, tAllGWs, alertIdleGw, 2, actionDel, "2"},
+		{[]string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}, []string{}, tAllGWs, alertHighGwConn, 2, actionNone, ""},
+		{[]string{"1", "2", "5"}, []string{""}, tAllGWs, 9999, 2, actionNone, ""},
+		{[]string{"1", "2", "5"}, []string{""}, tAllGWs, alertError, 2, actionNone, ""},
+		{[]string{"3", "2", "5"}, []string{"2"}, tAllGWs, alertIdleGw, 5, actionNone, ""},
+		{[]string{"3", "2", "5", "6", "7"}, []string{"2"}, tAllGWs, alertIdleGw, 5, actionNone, ""},
+		{[]string{"3", "2", "5", "6", "7"}, []string{}, tAllGWs, alertHighGwConn, 5, actionAdd, "1"},
+		{[]string{"3", "2", "5", "6", "7", "4"}, []string{"4", "7"}, tAllGWs, alertIdleGw, 5, actionDel, "4"},
 	}
 
 	for _, c := range cases {
-		gotDecision := makeDecision(c.LiveGWs, c.IdleGWs, c.AllGWs, c.Alert)
+		gotDecision := makeDecision(c.LiveGWs, c.IdleGWs, c.AllGWs, c.Alert, c.HostCount)
 		assert.Equal(t, c.ExpectedAction, gotDecision.Action)
 		assert.Equal(t, c.ExpectedGwIP, gotDecision.GwIP)
 	}

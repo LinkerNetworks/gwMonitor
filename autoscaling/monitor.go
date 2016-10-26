@@ -72,7 +72,7 @@ func startGwMonitorDaemon(highGwThreshold, lowThreshold int) {
 		if gwOverloadTolerance <= 0 {
 			rewindGwOverloadTimer()
 			// gateway overload for 60s(default)
-			decision := makeDecision(allLiveGWs, allIdleGWs, allGwScaleIPs, alert)
+			decision := makeDecision(allLiveGWs, allIdleGWs, allGwScaleIPs, alert, ovs.HostCount())
 			log.Printf("I | figured out decision %v...\n", decision)
 			if decision.Action == actionNone {
 				log.Printf("I | wont scale out because \"%s\"\n", decision.Reason)
@@ -83,7 +83,7 @@ func startGwMonitorDaemon(highGwThreshold, lowThreshold int) {
 		if gwIdleTolerance <= 0 {
 			rewindGwIdleTimer()
 			// gateway idle for 300s(default)
-			decision := makeDecision(allLiveGWs, allIdleGWs, allGwScaleIPs, alert)
+			decision := makeDecision(allLiveGWs, allIdleGWs, allGwScaleIPs, alert, ovs.HostCount())
 			log.Printf("I | figured out operation %v...\n", decision)
 			if decision.Action == actionNone {
 				log.Printf("I | wont scale in because \"%s\"\n", decision.Reason)

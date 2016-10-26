@@ -1,10 +1,6 @@
 package autoscaling
 
-import (
-	"log"
-
-	"github.com/LinkerNetworks/gwMonitor/ovs"
-)
+import "log"
 
 const (
 	alertHighGwConn = iota
@@ -41,7 +37,7 @@ func analyseAlert(instances, connections int, highThreshold int, lowThreshold in
 }
 
 // makeDecision decides what to do on which gw.
-func makeDecision(liveGWs, idleGWs, allGWs []string, alert int) (decision Decision) {
+func makeDecision(liveGWs, idleGWs, allGWs []string, alert, hostCount int) (decision Decision) {
 	switch alert {
 	case alertHighGwConn:
 		gwAddIP := selectAddGw(liveGWs, allGWs)
@@ -53,9 +49,9 @@ func makeDecision(liveGWs, idleGWs, allGWs []string, alert int) (decision Decisi
 		decision.Action = actionAdd
 		decision.GwIP = gwAddIP
 	case alertIdleGw:
-		if len(liveGWs) <= ovs.HostCount() {
+		if len(liveGWs) <= hostCount {
 			decision.Action = actionNone
-			decision.Reason = "liveGws <= HostCount"
+			decision.Reason = "liveGws <= hostCount"
 			return
 		}
 		gwDelIP := selectDelGw(idleGWs)
