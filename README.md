@@ -10,7 +10,7 @@ Clone and move this project under $GOPATH/src/github.com/LinkerNetworks/ to star
 
 | Key        | Example           | Meaning  |Default
 | :--------- |:----------------:| :---------|:--------:
-| ADDRESSES | 192.168.1.49:8000,192.168.1.49:8000 | IP addresses of OVS. | "" |
+| ADDRESSES | 192.168.1.49:8000,192.168.1.50:8000 | IP addresses of OVS. | "" |
 | MONITOR_TYPE | PGW | Type of gateway, PGW or SGW. | "" |
 | PGW_CONN_NUMBER_HIGH_THRESHOLD | 200 |Threshold of PGW average connections. | 0 |
 | SGW_CONN_NUMBER_HIGH_THRESHOLD | 300 | Threshold of SGW average connections. | 0 |
@@ -18,7 +18,7 @@ Clone and move this project under $GOPATH/src/github.com/LinkerNetworks/ to star
 
 If `MONITOR_TYPE` is set to `"PGW"`, setting only `PGW_CONN_NUMBER_HIGH_THRESHOLD`.
 
-Similarly, **SGW** for **SGW_CONN_NUMBER_HIGH_THRESHOLD**.
+Similarly, `"SGW"` for `SGW_CONN_NUMBER_HIGH_THRESHOLD`.
 
 If env `CLIENT_ENDPOINT` is set, field `client_endpoint` in `monitor.conf` will be ignored.
 
