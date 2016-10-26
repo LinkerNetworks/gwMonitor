@@ -42,12 +42,6 @@ func analyseAlert(instances, connections int, highThreshold int, lowThreshold in
 
 // makeDecision decides what to do on which gw.
 func makeDecision(liveGWs, idleGWs, allGWs []string, alert int) (decision Decision) {
-	if len(liveGWs) <= ovs.HostCount() {
-		decision.Action = actionNone
-		decision.Reason = "liveGws <= HostCount"
-		return
-	}
-
 	switch alert {
 	case alertHighGwConn:
 		gwAddIP := selectAddGw(liveGWs, allGWs)
@@ -59,6 +53,11 @@ func makeDecision(liveGWs, idleGWs, allGWs []string, alert int) (decision Decisi
 		decision.Action = actionAdd
 		decision.GwIP = gwAddIP
 	case alertIdleGw:
+		if len(liveGWs) <= ovs.HostCount() {
+			decision.Action = actionNone
+			decision.Reason = "liveGws <= HostCount"
+			return
+		}
 		gwDelIP := selectDelGw(idleGWs)
 		if len(gwDelIP) == 0 {
 			decision.Action = actionNone
