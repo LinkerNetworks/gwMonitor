@@ -26,39 +26,18 @@ var (
 // StartMonitor checks if GW is overload or idle for a period, and trigger scaling if it is.
 func StartMonitor() {
 	verifyEnv()
-	monitorType := env(keyMonitorType).Value
-	switch monitorType {
-	case typePGW:
-		log.Println("I | starting PGW monitor daemon...")
-		highThreshold := env(keyPgwHighThreshold).ToInt()
-		lowThreshold := env(keyPgwLowThreshold).ToInt()
-		if highThreshold <= 0 {
-			log.Printf("E | invalid threshold, check env %s\n", keyPgwHighThreshold)
-			os.Exit(1)
-		}
-		if lowThreshold <= 0 {
-			log.Printf("E | invalid threshold, check env %s\n", keyPgwLowThreshold)
-			os.Exit(1)
-		}
-		startGwMonitorDaemon(highThreshold, lowThreshold)
-	case typeSGW:
-		log.Println("I | starting SGW monitor daemon...")
-		highThreshold := env(keySgwHighThreshold).ToInt()
-		lowThreshold := env(keySgwLowThreshold).ToInt()
-		if highThreshold <= 0 {
-			log.Printf("E | invalid threshold, check env %s\n", keySgwHighThreshold)
-			os.Exit(1)
-		}
-		if lowThreshold <= 0 {
-			log.Printf("E | invalid threshold, check env %s\n", keySgwLowThreshold)
-			os.Exit(1)
-		}
-		startGwMonitorDaemon(highThreshold, lowThreshold)
-	default:
-		log.Printf("E | unknown monitor type \"%s\", must set env %s\n", monitorType, keyMonitorType)
+	highThreshold := env(keyGwHighThreshold).ToInt()
+	lowThreshold := env(keyGwLowThreshold).ToInt()
+	log.Println("I | starting GW monitor daemon...")
+	if highThreshold <= 0 {
+		log.Printf("E | invalid threshold, check env %s\n", keyGwHighThreshold)
 		os.Exit(1)
 	}
-
+	if lowThreshold <= 0 {
+		log.Printf("E | invalid threshold, check env %s\n", keyGwLowThreshold)
+		os.Exit(1)
+	}
+	startGwMonitorDaemon(highThreshold, lowThreshold)
 }
 
 func startGwMonitorDaemon(highGwThreshold, lowThreshold int) {

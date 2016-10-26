@@ -84,13 +84,8 @@ func verifyEnv() {
 	mustSet(keyMonitorType)
 	mustSet(keyClientEndpoint)
 	mustSet(keyAddresses)
-	switch env(keyMonitorType).Value {
-	case typePGW:
-		mustSet(keyPgwHighThreshold)
-	case typeSGW:
-		mustSet(keySgwHighThreshold)
-	default:
-	}
+	mustSet(keyGwHighThreshold)
+	mustSet(keyGwHighThreshold)
 }
 
 func mustSet(key string) {
