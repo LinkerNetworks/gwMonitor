@@ -1,6 +1,7 @@
 package autoscaling
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -102,6 +103,7 @@ func startGwMonitorDaemon(highGwThreshold int) {
 			scaleGw(decision.Action, decision.GwIP)
 			go notifyOvs(decision.GwIP)
 		}
+		fmt.Println("")
 	}
 }
 

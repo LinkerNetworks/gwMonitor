@@ -19,8 +19,10 @@ func initScaling() {
 func scaleGw(action string, gwIP string) {
 	switch action {
 	case actionAdd:
+		log.Printf("====> adding GW with scale ip: %s\n", gwIP)
 		scaleGwOut(gwIP)
 	case actionDel:
+		log.Printf("====> deleting GW with scale ip: %s\n", gwIP)
 		scaleGwIn(gwIP)
 	default:
 		log.Printf("unknown action \"%s\"\n", action)
