@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/LinkerNetworks/gwMonitor/conf"
 	marathon "github.com/gambol99/go-marathon"
@@ -32,13 +33,21 @@ func initTemplate() {
 func getEth1Ip(scaleInIp string) (eth1Ip string) {
 	app := getAppByEnv(keyScaleInIP, scaleInIp)
 	envMap := *app.Env
-	return envMap[keyEth1]
+	arr := strings.Split(envMap[keyEth1], "/")
+	if len(arr) >= 1 {
+		return arr[0]
+	}
+	return
 }
 
 func getEth2Ip(scaleInIp string) (eth2Ip string) {
 	app := getAppByEnv(keyScaleInIP, scaleInIp)
 	envMap := *app.Env
-	return envMap[keyEth2]
+	arr := strings.Split(envMap[keyEth2], "/")
+	if len(arr) >= 1 {
+		return arr[0]
+	}
+	return
 }
 
 func getAppByEnv(key string, value string) (app *marathon.Application) {
