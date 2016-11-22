@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/LinkerNetworks/gwMonitor/conf"
 )
 
 // call client to add an app
@@ -15,8 +17,8 @@ import (
 func addComponent(component *MinComponent) (err error) {
 	endpoint := env(keyClientEndpoint).Value
 	if strings.TrimSpace(endpoint) == "" {
-		log.Printf("client endpoint not set, check env %s\n", keyClientEndpoint)
-		return errors.New("invalid client endpoint")
+		log.Printf("client endpoint not set, using default\n")
+		endpoint = conf.OptionsReady.ClientEndpoint
 	}
 
 	url := "http://" + endpoint + "/v1/components"
@@ -56,8 +58,8 @@ func addComponent(component *MinComponent) (err error) {
 func startComponent(appID string) (err error) {
 	endpoint := env(keyClientEndpoint).Value
 	if strings.TrimSpace(endpoint) == "" {
-		log.Printf("client endpoint not set, check env %s\n", keyClientEndpoint)
-		return errors.New("invalid client endpoint")
+		log.Printf("client endpoint not set, using default\n")
+		endpoint = conf.OptionsReady.ClientEndpoint
 	}
 
 	url := "http://" + endpoint + "/v1/components/start"
@@ -95,8 +97,8 @@ func startComponent(appID string) (err error) {
 func delComponent(appID string) (err error) {
 	endpoint := env(keyClientEndpoint).Value
 	if strings.TrimSpace(endpoint) == "" {
-		log.Printf("client endpoint not set, check env %s\n", keyClientEndpoint)
-		return errors.New("invalid client endpoint")
+		log.Printf("client endpoint not set, using default\n")
+		endpoint = conf.OptionsReady.ClientEndpoint
 	}
 
 	url := "http://" + endpoint + "/v1/components"

@@ -76,7 +76,6 @@ func verifySgwJSON() {
 func verifyEnv() {
 	log.Println("verifying env...")
 	mustSet(keyMonitorType)
-	mustSet(keyClientEndpoint)
 	mustSet(keyAddresses)
 	mustSet(keyGwHighThreshold)
 	mustSet(keyGwLowThreshold)
