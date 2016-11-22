@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	pollingSeconds      = conf.OptionsReady.PollingTime
+	pollingSeconds      = conf.OptionsReady.PollingSeconds
 	pollingTime         = time.Duration(pollingSeconds) * time.Second
 	gwOverloadTolerance = 0
 	gwIdleTolerance     = 0

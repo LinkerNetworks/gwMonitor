@@ -21,7 +21,7 @@ var (
 
 // Options is the structure for config file.
 type Options struct {
-	PollingTime         int    `hcl:"polling_time"`
+	PollingSeconds      int    `hcl:"polling_seconds"`
 	GwOverloadTolerance int    `hcl:"gw_overload_tolerance"`
 	GwIdleTolerance     int    `hcl:"gw_idle_tolerance"`
 	ClientEndpoint      string `hcl:"client_endpoint"`
