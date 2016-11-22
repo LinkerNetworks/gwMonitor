@@ -8,11 +8,14 @@ import (
 
 const (
 	// env inside gwMonitor container
-	keyMonitorType     = "MONITOR_TYPE"
-	keyGwHighThreshold = "GW_CONN_NUMBER_HIGH_THRESHOLD"
-	keyGwLowThreshold  = "GW_CONN_NUMBER_LOW_THRESHOLD"
-	keyClientEndpoint  = "CLIENT_ENDPOINT"
-	keyAddresses       = "ADDRESSES"
+	keyMonitorType         = "MONITOR_TYPE"
+	keyGwHighThreshold     = "GW_CONN_NUMBER_HIGH_THRESHOLD"
+	keyGwLowThreshold      = "GW_CONN_NUMBER_LOW_THRESHOLD"
+	keyClientEndpoint      = "CLIENT_ENDPOINT"
+	keyAddresses           = "ADDRESSES"
+	keyPollingSeconds      = "POLLING_SECONDS"
+	keyGwOverloadTolerance = "GW_OVERLOAD_TOLERANCE"
+	keyGwIdleTolerance     = "GW_IDLE_TOLERANCE"
 )
 
 // Env is struct of environment variable

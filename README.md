@@ -15,10 +15,16 @@ Clone and move this project under $GOPATH/src/github.com/LinkerNetworks/ to star
 | GW_CONN_NUMBER_HIGH_THRESHOLD | 200 |High threshold of GW average connections. | 0 |
 | GW_CONN_NUMBER_LOW_THRESHOLD | 100 |Low threshold of GW average connections. | 0 |
 | CLIENT_ENDPOINT | 192.168.10.91:10004 | Endpoint of Linker DC/OS client. | "" |
+| POLLING_SECONDS | 1 | Peroid fetching from OVS. | 1 |
+| GW_OVERLOAD_TOLERANCE | 60 | Max overload alert enjured times. | 120 |
+| GW_IDLE_TOLERANCE | 60 | Max idle alert enjured times. | 120 |
+
 
 `GW_CONN_NUMBER_HIGH_THRESHOLD` and `GW_CONN_NUMBER_LOW_THRESHOLD` apply to PGW/SGW both.
 
 If env `CLIENT_ENDPOINT` is set, field `client_endpoint` in `monitor.conf` will be ignored.
+
+It is recommended to set `GW_OVERLOAD_TOLERANCE` and `GW_IDLE_TOLERANCE` above 30.
 
 # Docker
 

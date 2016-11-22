@@ -17,11 +17,20 @@ const (
 )
 
 var (
-	pollingSeconds      = conf.OptionsReady.PollingSeconds
-	pollingTime         = time.Duration(pollingSeconds) * time.Second
+	pollingSeconds      int
+	pollingTime         time.Duration
 	gwOverloadTolerance = 0
 	gwIdleTolerance     = 0
 )
+
+func initMonitor() {
+	pollingSeconds = env(keyPollingSeconds).ToInt()
+	if pollingSeconds <= 0 {
+		log.Printf("polling seconds not set, using default\n")
+		pollingSeconds = conf.OptionsReady.PollingSeconds
+	}
+	pollingTime = time.Duration(pollingSeconds) * time.Second
+}
 
 // StartMonitor checks if GW is overload or idle for a period, and trigger scaling if it is.
 func StartMonitor() {
@@ -97,16 +106,23 @@ func startGwMonitorDaemon(highGwThreshold, lowThreshold int) {
 }
 
 func rewindGwOverloadTimer() {
-	gwOverloadTolerance = conf.OptionsReady.GwOverloadTolerance
+	gwOverloadTolerance = env(keyGwOverloadTolerance).ToInt()
+	if gwOverloadTolerance <= 0 {
+		gwOverloadTolerance = conf.OptionsReady.GwOverloadTolerance
+	}
 }
 
 func rewindGwIdleTimer() {
-	gwIdleTolerance = conf.OptionsReady.GwIdleTolerance
+	gwIdleTolerance = env(keyGwIdleTolerance).ToInt()
+	if gwIdleTolerance <= 0 {
+		gwIdleTolerance = conf.OptionsReady.GwIdleTolerance
+	}
 }
 
 func initDaemon() {
 	initTemplate()
 	initScaling()
+	initMonitor()
 	rewindGwOverloadTimer()
 	rewindGwIdleTimer()
 }
