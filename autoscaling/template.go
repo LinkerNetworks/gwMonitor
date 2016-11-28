@@ -32,6 +32,10 @@ func initTemplate() {
 
 func getEth1Ip(scaleInIp string) (eth1Ip string) {
 	app := getAppByEnv(keyScaleInIP, scaleInIp)
+	if app == nil {
+		log.Printf("app not found by env key %s, value %s\n", keyScaleInIP, scaleInIp)
+		return
+	}
 	envMap := *app.Env
 	arr := strings.Split(envMap[keyEth1], "/")
 	if len(arr) >= 1 {
@@ -42,6 +46,10 @@ func getEth1Ip(scaleInIp string) (eth1Ip string) {
 
 func getEth2Ip(scaleInIp string) (eth2Ip string) {
 	app := getAppByEnv(keyScaleInIP, scaleInIp)
+	if app == nil {
+		log.Printf("app not found by env key %s, value %s\n", keyScaleInIP, scaleInIp)
+		return
+	}
 	envMap := *app.Env
 	arr := strings.Split(envMap[keyEth2], "/")
 	if len(arr) >= 1 {
