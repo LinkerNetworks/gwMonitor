@@ -1,6 +1,7 @@
 package autoscaling
 
 import (
+	"errors"
 	"log"
 	"strings"
 )
@@ -31,6 +32,11 @@ func scaleGw(action string, gwIP string) {
 
 func scaleGwOut(gwAddIP string) (err error) {
 	appAdd := getAppByEnv(keyScaleInIP, gwAddIP)
+	if appAdd == nil {
+		err = errors.New("app not found")
+		log.Printf("app not found by env key %s, value %s\n", keyScaleInIP, gwAddIP)
+		return
+	}
 
 	c := &MinComponent{}
 	c.App = *appAdd
@@ -51,6 +57,12 @@ func scaleGwOut(gwAddIP string) (err error) {
 
 func scaleGwIn(gwDelIP string) (err error) {
 	appDel := getAppByEnv(keyScaleInIP, gwDelIP)
+
+	if appDel == nil {
+		err = errors.New("app not found")
+		log.Printf("app not found by env key %s, value %s\n", keyScaleInIP, gwDelIP)
+		return
+	}
 
 	err = delComponent(appDel.ID)
 	if err != nil {
