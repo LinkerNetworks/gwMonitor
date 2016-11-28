@@ -37,7 +37,7 @@ func StartMonitor() {
 	verifyEnv()
 	highThreshold := env(keyGwHighThreshold).ToInt()
 	lowThreshold := env(keyGwLowThreshold).ToInt()
-	log.Println("I | starting GW monitor daemon...")
+	log.Printf("I | starting %s monitor daemon...\n", env(keyMonitorType).Value)
 	if highThreshold <= 0 {
 		log.Printf("E | invalid threshold, check env %s\n", keyGwHighThreshold)
 		os.Exit(1)
@@ -70,10 +70,10 @@ func startGwMonitorDaemon(highGwThreshold, lowThreshold int) {
 		switch alert {
 		case alertHighGwConn:
 			gwOverloadTolerance--
-			log.Printf("I | will consider scaling out GW in %ds\n", gwOverloadTolerance*pollingSeconds)
+			log.Printf("I | will consider scaling out %s in %ds\n", env(keyMonitorType).Value, gwOverloadTolerance*pollingSeconds)
 		case alertIdleGw:
 			gwIdleTolerance--
-			log.Printf("I | will consider scaling in GW in %ds\n", gwIdleTolerance*pollingSeconds)
+			log.Printf("I | will consider scaling in %s in %ds\n", env(keyMonitorType).Value, gwIdleTolerance*pollingSeconds)
 		default:
 			rewindGwOverloadTimer()
 			rewindGwIdleTimer()
