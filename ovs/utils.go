@@ -29,7 +29,7 @@ func UdpCall(server, msg string) (info string, err error) {
 
 	defer conn.Close()
 
-	log.Printf("Writing to server[%s], data: %s\n", addr, msg)
+	// log.Printf("Writing to server[%s], data: %s\n", addr, msg)
 	_, err = conn.Write([]byte(msg))
 	if err != nil {
 		log.Println("error: ", "failed:", err)
@@ -46,7 +46,7 @@ func UdpCall(server, msg string) (info string, err error) {
 
 	if remoteAddr != nil {
 		if n > 0 {
-			log.Println("Got data from address", remoteAddr, "message:", string(data[0:n]), n)
+			// log.Println("Got data from address", remoteAddr, "message:", string(data[0:n]), n)
 			info = string(data[0:n])
 		}
 	}
@@ -112,7 +112,7 @@ func process(allResp []Resp) (sumInstance int, sumConn int, allScaleInIPs []stri
 		}
 	}
 	//monitorType, _ = getMonitorType()
-	log.Printf("sumInstance=%d, sumConn=%d, allScaleInIPs=%s, allLiveGWs=%v\n",
-		sumInstance, sumConn, allScaleInIPs, allLiveGWs)
+	// log.Printf("sumInstance=%d, sumConn=%d, allScaleInIPs=%s, allLiveGWs=%v\n",
+	// 	sumInstance, sumConn, allScaleInIPs, allLiveGWs)
 	return
 }
