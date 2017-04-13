@@ -1,5 +1,10 @@
 [TOC]
 
+# IMPORTANT
+This repo is no longer maintained.
+
+It has been moved to BitBucket, redirect to [bitbucket.org/linkernetworks/gwmonitor][1]
+
 # gwMonitor
 Monitor and autoscaling for PGW & SGW
 
@@ -59,3 +64,5 @@ docker run -e MONITOR_TYPE="PGW" \
 	--network=host \
 	linkerrepository/gwmonitor:dev
 ```
+
+[1]: https://bitbucket.org/linkernetworks/gwmonitor/overview
