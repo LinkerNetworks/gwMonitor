@@ -1,12 +1,28 @@
-[![Build Status](https://travis-ci.org/LinkerNetworks/gwMonitor.svg)](https://travis-ci.org/LinkerNetworks/gwMonitor)
-[![Go Report](https://goreportcard.com/badge/github.com/LinkerNetworks/gwMonitor)](https://goreportcard.com/report/github.com/LinkerNetworks/gwMonitor)
+[TOC]
+
+# IMPORTANT
+This repo is no longer maintained.
+
+It has been moved to BitBucket, redirect to [bitbucket.org/linkernetworks/gwmonitor][1]
 
 # gwMonitor
 Monitor and autoscaling for PGW & SGW
 
-Clone and move this project under $GOPATH/src/github.com/LinkerNetworks/ to start your work.
+# Clone
+Clone and move this project under GOPATH.
 
-# Envs
+```sh
+git clone git@bitbucket.org:linkernetworks/gwmonitor.git $GOPATH/src/bitbucket.org/linkernetworks/
+```
+
+# Build
+
+```sh
+./build.sh
+```
+
+# Config
+## Envs
 
 | Key        | Example           | Meaning  |Default
 | :--------- |:----------------:| :---------|:--------:
@@ -28,8 +44,25 @@ It is recommended to set `GW_OVERLOAD_TOLERANCE` and `GW_IDLE_TOLERANCE` above 3
 
 # Docker
 
+## Build
+
 ```sh
-./build.sh
 docker build -t linkerrepository/gwmonitor:dev .
-docker run -e MONITOR_TYPE="PGW" -e CLIENT_ENDPOINT="192.168.10.91:10004" -e GW_CONN_NUMBER_HIGH_THRESHOLD=200 -e GW_CONN_NUMBER_LOW_THRESHOLD=100 -e ADDRESSES="192.168.10.186:18080" --network=host linkerrepository/gwmonitor:dev
 ```
+
+## Run
+
+```sh
+docker run -e MONITOR_TYPE="PGW" \
+	-e CLIENT_ENDPOINT="192.168.10.91:10004" \
+	-e GW_CONN_NUMBER_HIGH_THRESHOLD=200 \
+	-e GW_CONN_NUMBER_LOW_THRESHOLD=100 \
+	-e ADDRESSES="192.168.10.186:18080" \
+	-e POLLING_SECONDS="1" \
+	-e GW_OVERLOAD_TOLERANCE="60" \
+	-e GW_IDLE_TOLERANCE="60" \
+	--network=host \
+	linkerrepository/gwmonitor:dev
+```
+
+[1]: https://bitbucket.org/linkernetworks/gwmonitor/overview
